@@ -381,7 +381,7 @@ public class DBInterface extends JFrame {
                         "WHERE price >= ?", Query.TYPE_READ, List.of(minPrice)));
 
         ParameterTemplate qualification = new ParameterTemplate("Квалификация", ParameterTemplate.TYPE_STRING);
-        queries.add(new SimpleQuery("Удалить все образования по квалификации",
+        queries.add(new ProcedureQuery("Удалить все образования по квалификации",
                 "DO $$\n" +
                         "DECLARE\n" +
                         "  r int;\n" +
