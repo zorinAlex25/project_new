@@ -3,7 +3,7 @@ package old.util;
 import java.sql.*;
 import java.util.List;
 
-public class Query {
+public abstract class Query {
     protected String name; // название запроса
     protected String queryString; // хранит сам SQL-запрос в виде строки
     protected List<ParameterTemplate> requiredParamsTemplates; // хранит типы параметров

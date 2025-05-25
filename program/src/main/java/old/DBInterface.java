@@ -327,8 +327,8 @@ public class DBInterface extends JFrame {
         ParameterTemplate groupId = new ParameterTemplate("ID группы", ParameterTemplate.TYPE_INT);
         ParameterTemplate minPrice = new ParameterTemplate("Мин. цена", ParameterTemplate.TYPE_INT);
 
-        queries.add(new Query("Вывести всех сотрудников", "SELECT * FROM employee", Query.TYPE_READ, null));
-        queries.add(new Query("Вывести проекты с датами",
+        queries.add(new SimpleQuery("Вывести всех сотрудников", "SELECT * FROM employee", Query.TYPE_READ, null));
+        queries.add(new SimpleQuery("Вывести проекты с датами",
                 "SELECT project.id AS project_id, project.pr_name AS project_name," +
                         "project.s_date AS project_start_date, MAX(stage.end_date) AS project_end_date\n" +
                         "FROM project\n" +
@@ -336,7 +336,7 @@ public class DBInterface extends JFrame {
                         "GROUP BY project_id, project_name, project_start_date\n" +
                         "ORDER BY project_id\n", Query.TYPE_READ, null));
         // !!!!!!
-        queries.add(new Query("Вывести операции с датами",
+        queries.add(new SimpleQuery("Вывести операции с датами",
                 "SELECT op.id AS operation_id, \n" +
                 "op.op_name AS operation_name, \n" +
                 "op.start_date AS operation_start_date, \n" +
@@ -368,7 +368,7 @@ public class DBInterface extends JFrame {
                         "FETCH ALL FROM _cursor;\n", Query.TYPE_READ, null));
          */
 
-        queries.add(new Query("Вывести сотрудников по группе",
+        queries.add(new SimpleQuery("Вывести сотрудников по группе",
                 "SELECT employee.empl_name AS \"name\", employee.empl_surname AS \"surname\", " +
                         "employee.empl_patronymic AS \"patronymic\"\n" +
                         "FROM employee\n" +
@@ -376,12 +376,12 @@ public class DBInterface extends JFrame {
                         "ON employee.gr_id = empl_group.id\n" +
                         "WHERE empl_group.id = ?\n", Query.TYPE_READ, List.of(groupId)));
 
-        queries.add(new Query("Вывести устройства по минимальной цене",
+        queries.add(new SimpleQuery("Вывести устройства по минимальной цене",
                 "SELECT t_code AS \"type code\", m_code AS \"model code\" FROM device\n" +
                         "WHERE price >= ?", Query.TYPE_READ, List.of(minPrice)));
 
         ParameterTemplate qualification = new ParameterTemplate("Квалификация", ParameterTemplate.TYPE_STRING);
-        queries.add(new Query("Удалить все образования по квалификации",
+        queries.add(new SimpleQuery("Удалить все образования по квалификации",
                 "DO $$\n" +
                         "DECLARE\n" +
                         "  r int;\n" +
@@ -415,7 +415,7 @@ public class DBInterface extends JFrame {
          */
 
         ParameterTemplate workerID = new ParameterTemplate("ID работника",ParameterTemplate.TYPE_INT);
-        queries.add(new Query("Перевести сотрудника с нужным ID в другую группу",
+        queries.add(new SimpleQuery("Перевести сотрудника с нужным ID в другую группу",
                 "UPDATE employee\n" +
                 "SET gr_id = ?\n" +
                 "WHERE id = ?;\n", Query.TYPE_UPDATE, List.of(groupId,workerID)));
