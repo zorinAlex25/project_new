@@ -1,0 +1,1122 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 17.4 (Debian 17.4-1.pgdg120+2)
+-- Dumped by pg_dump version 17.4
+
+-- Started on 2025-05-24 14:29:57 UTC
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 221 (class 1259 OID 16416)
+-- Name: cont_pow_supply_unit; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.cont_pow_supply_unit (
+    t_code integer NOT NULL,
+    m_code integer NOT NULL,
+    cur_frequency integer
+);
+
+
+ALTER TABLE public.cont_pow_supply_unit OWNER TO postgres;
+
+--
+-- TOC entry 219 (class 1259 OID 16396)
+-- Name: device; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.device (
+    t_code integer NOT NULL,
+    m_code integer NOT NULL,
+    dev_name character varying(200),
+    voltage integer,
+    power integer,
+    price integer,
+    pr_id integer
+);
+
+
+ALTER TABLE public.device OWNER TO postgres;
+
+--
+-- TOC entry 220 (class 1259 OID 16406)
+-- Name: drive_freq_conv; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.drive_freq_conv (
+    t_code integer NOT NULL,
+    m_code integer NOT NULL,
+    in_cur_frequency integer,
+    out_cur_frequency integer
+);
+
+
+ALTER TABLE public.drive_freq_conv OWNER TO postgres;
+
+--
+-- TOC entry 237 (class 1259 OID 16518)
+-- Name: education; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.education (
+    id integer NOT NULL,
+    qualification character varying(5000),
+    training character varying(5000)
+);
+
+
+ALTER TABLE public.education OWNER TO postgres;
+
+--
+-- TOC entry 236 (class 1259 OID 16517)
+-- Name: education_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.education_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.education_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3486 (class 0 OID 0)
+-- Dependencies: 236
+-- Name: education_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.education_id_seq OWNED BY public.education.id;
+
+
+--
+-- TOC entry 238 (class 1259 OID 16526)
+-- Name: empl_edu_list; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.empl_edu_list (
+    edu_id integer NOT NULL,
+    empl_id integer NOT NULL
+);
+
+
+ALTER TABLE public.empl_edu_list OWNER TO postgres;
+
+--
+-- TOC entry 227 (class 1259 OID 16451)
+-- Name: empl_group; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.empl_group (
+    id integer NOT NULL,
+    purpose character varying(500),
+    gr_name character varying(500)
+);
+
+
+ALTER TABLE public.empl_group OWNER TO postgres;
+
+--
+-- TOC entry 226 (class 1259 OID 16450)
+-- Name: empl_group_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.empl_group_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.empl_group_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3487 (class 0 OID 0)
+-- Dependencies: 226
+-- Name: empl_group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.empl_group_id_seq OWNED BY public.empl_group.id;
+
+
+--
+-- TOC entry 231 (class 1259 OID 16477)
+-- Name: employee; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.employee (
+    id integer NOT NULL,
+    empl_name character varying(100),
+    empl_surname character varying(100),
+    empl_patronymic character varying(100),
+    payment integer,
+    experience integer,
+    gr_id integer
+);
+
+
+ALTER TABLE public.employee OWNER TO postgres;
+
+--
+-- TOC entry 230 (class 1259 OID 16476)
+-- Name: employee_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.employee_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.employee_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3488 (class 0 OID 0)
+-- Dependencies: 230
+-- Name: employee_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.employee_id_seq OWNED BY public.employee.id;
+
+
+--
+-- TOC entry 235 (class 1259 OID 16496)
+-- Name: op_stat_change; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.op_stat_change (
+    id integer NOT NULL,
+    cng_date date,
+    op_id integer,
+    stat_id integer,
+    empl_id integer
+);
+
+
+ALTER TABLE public.op_stat_change OWNER TO postgres;
+
+--
+-- TOC entry 234 (class 1259 OID 16495)
+-- Name: op_stat_change_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.op_stat_change_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.op_stat_change_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3489 (class 0 OID 0)
+-- Dependencies: 234
+-- Name: op_stat_change_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.op_stat_change_id_seq OWNED BY public.op_stat_change.id;
+
+
+--
+-- TOC entry 229 (class 1259 OID 16460)
+-- Name: operation; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.operation (
+    id integer NOT NULL,
+    op_name character varying(200),
+    start_date date,
+    step_id integer,
+    gr_id integer
+);
+
+
+ALTER TABLE public.operation OWNER TO postgres;
+
+--
+-- TOC entry 228 (class 1259 OID 16459)
+-- Name: operation_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.operation_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.operation_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3490 (class 0 OID 0)
+-- Dependencies: 228
+-- Name: operation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.operation_id_seq OWNED BY public.operation.id;
+
+
+--
+-- TOC entry 218 (class 1259 OID 16390)
+-- Name: project; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.project (
+    id integer NOT NULL,
+    pr_name character varying(200),
+    appl_field character varying(200),
+    s_date date
+);
+
+
+ALTER TABLE public.project OWNER TO postgres;
+
+--
+-- TOC entry 217 (class 1259 OID 16389)
+-- Name: project_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.project_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.project_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3491 (class 0 OID 0)
+-- Dependencies: 217
+-- Name: project_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.project_id_seq OWNED BY public.project.id;
+
+
+--
+-- TOC entry 223 (class 1259 OID 16427)
+-- Name: stage; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.stage (
+    id integer NOT NULL,
+    stg_name character varying(200),
+    start_date date,
+    end_date date,
+    pr_id integer
+);
+
+
+ALTER TABLE public.stage OWNER TO postgres;
+
+--
+-- TOC entry 222 (class 1259 OID 16426)
+-- Name: stage_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.stage_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.stage_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3492 (class 0 OID 0)
+-- Dependencies: 222
+-- Name: stage_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.stage_id_seq OWNED BY public.stage.id;
+
+
+--
+-- TOC entry 233 (class 1259 OID 16489)
+-- Name: status; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.status (
+    id integer NOT NULL,
+    value character varying(100)
+);
+
+
+ALTER TABLE public.status OWNER TO postgres;
+
+--
+-- TOC entry 232 (class 1259 OID 16488)
+-- Name: status_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.status_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.status_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3493 (class 0 OID 0)
+-- Dependencies: 232
+-- Name: status_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.status_id_seq OWNED BY public.status.id;
+
+
+--
+-- TOC entry 225 (class 1259 OID 16439)
+-- Name: step; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.step (
+    id integer NOT NULL,
+    step_name character varying(200),
+    start_date date,
+    end_date date,
+    stg_id integer
+);
+
+
+ALTER TABLE public.step OWNER TO postgres;
+
+--
+-- TOC entry 224 (class 1259 OID 16438)
+-- Name: step_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.step_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.step_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3494 (class 0 OID 0)
+-- Dependencies: 224
+-- Name: step_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.step_id_seq OWNED BY public.step.id;
+
+
+--
+-- TOC entry 3274 (class 2604 OID 16521)
+-- Name: education id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.education ALTER COLUMN id SET DEFAULT nextval('public.education_id_seq'::regclass);
+
+
+--
+-- TOC entry 3269 (class 2604 OID 16454)
+-- Name: empl_group id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.empl_group ALTER COLUMN id SET DEFAULT nextval('public.empl_group_id_seq'::regclass);
+
+
+--
+-- TOC entry 3271 (class 2604 OID 16480)
+-- Name: employee id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.employee ALTER COLUMN id SET DEFAULT nextval('public.employee_id_seq'::regclass);
+
+
+--
+-- TOC entry 3273 (class 2604 OID 16499)
+-- Name: op_stat_change id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.op_stat_change ALTER COLUMN id SET DEFAULT nextval('public.op_stat_change_id_seq'::regclass);
+
+
+--
+-- TOC entry 3270 (class 2604 OID 16463)
+-- Name: operation id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.operation ALTER COLUMN id SET DEFAULT nextval('public.operation_id_seq'::regclass);
+
+
+--
+-- TOC entry 3266 (class 2604 OID 16393)
+-- Name: project id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.project ALTER COLUMN id SET DEFAULT nextval('public.project_id_seq'::regclass);
+
+
+--
+-- TOC entry 3267 (class 2604 OID 16430)
+-- Name: stage id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.stage ALTER COLUMN id SET DEFAULT nextval('public.stage_id_seq'::regclass);
+
+
+--
+-- TOC entry 3272 (class 2604 OID 16492)
+-- Name: status id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.status ALTER COLUMN id SET DEFAULT nextval('public.status_id_seq'::regclass);
+
+
+--
+-- TOC entry 3268 (class 2604 OID 16442)
+-- Name: step id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.step ALTER COLUMN id SET DEFAULT nextval('public.step_id_seq'::regclass);
+
+
+--
+-- TOC entry 3463 (class 0 OID 16416)
+-- Dependencies: 221
+-- Data for Name: cont_pow_supply_unit; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.cont_pow_supply_unit (t_code, m_code, cur_frequency) FROM stdin;
+2	4667	50
+2	7964	320
+\.
+
+
+--
+-- TOC entry 3461 (class 0 OID 16396)
+-- Dependencies: 219
+-- Data for Name: device; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.device (t_code, m_code, dev_name, voltage, power, price, pr_id) FROM stdin;
+1	5678	AD-719	440	8700	68800	2
+1	6747	FG-337	1260	2300	51900	1
+2	4667	KL-925	310	7600	42900	4
+2	7964	RG-659	700	5800	46500	3
+\.
+
+
+--
+-- TOC entry 3462 (class 0 OID 16406)
+-- Dependencies: 220
+-- Data for Name: drive_freq_conv; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.drive_freq_conv (t_code, m_code, in_cur_frequency, out_cur_frequency) FROM stdin;
+1	5678	340	50
+1	6747	450	50
+\.
+
+
+--
+-- TOC entry 3479 (class 0 OID 16518)
+-- Dependencies: 237
+-- Data for Name: education; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.education (id, qualification, training) FROM stdin;
+1	Бухгалтер	Узкая
+2	Бухгалтер	Широкая
+3	Главный бухгалтер	Широкая
+4	Финансист	Широкая
+5	Инженер-физик	Узкая
+6	Инженер-физик	Широкая
+7	Главный инженер	Широкая
+\.
+
+
+--
+-- TOC entry 3480 (class 0 OID 16526)
+-- Dependencies: 238
+-- Data for Name: empl_edu_list; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.empl_edu_list (edu_id, empl_id) FROM stdin;
+1	1
+4	1
+3	2
+3	3
+2	4
+5	5
+6	6
+7	7
+6	8
+7	9
+5	10
+7	11
+6	12
+\.
+
+
+--
+-- TOC entry 3469 (class 0 OID 16451)
+-- Dependencies: 227
+-- Data for Name: empl_group; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.empl_group (id, purpose, gr_name) FROM stdin;
+1	Финансы и бухучёт	ФБ-1
+2	Финансы и бухучёт	ФБ-2
+3	Исследования в области физики и электротехники	И-ФЭ-1
+4	Исследования в области физики и электротехники	И-ФЭ-2
+5	Исследования в области физики и электротехники	И-ФЭ-3
+\.
+
+
+--
+-- TOC entry 3473 (class 0 OID 16477)
+-- Dependencies: 231
+-- Data for Name: employee; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.employee (id, empl_name, empl_surname, empl_patronymic, payment, experience, gr_id) FROM stdin;
+4	Иван	Николаев	Дмитриевич	45000	6	2
+5	Матвей	Алексеев	Игнатьевич	70000	2	3
+6	София	Козлова	Александровна	70000	12	3
+7	Федор	Петров	Михайлович	70000	14	3
+8	Вероника	Михайлова	Антоновна	70000	12	4
+9	Анастасия	Павлова	Алексеевна	70000	13	4
+10	Илья	Попов	Гаврилович	70000	15	4
+11	Лев	Смирнов	Кузьмич	70000	15	5
+12	Кирилл	Волков	Фёдорович	70000	2	5
+2	Андрей	Фёдоров	Захарович	45000	6	1
+1	Анна	Кузнецова	Анатольевна	45000	3	1
+3	Эмилия	Лебедева	Ивановна	45000	13	4
+\.
+
+
+--
+-- TOC entry 3477 (class 0 OID 16496)
+-- Dependencies: 235
+-- Data for Name: op_stat_change; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.op_stat_change (id, cng_date, op_id, stat_id, empl_id) FROM stdin;
+1	2022-12-27	22	2	1
+2	2023-01-06	22	4	1
+3	2023-01-06	14	2	6
+4	2023-05-22	6	2	4
+5	2023-06-03	6	4	4
+6	2023-06-03	7	2	11
+7	2023-07-28	17	2	1
+8	2023-08-06	17	4	1
+9	2023-08-06	13	2	7
+10	2023-09-03	5	2	4
+11	2023-09-11	5	4	4
+12	2023-09-11	9	2	6
+13	2023-10-15	13	4	7
+14	2023-10-15	18	2	7
+15	2023-12-03	7	4	11
+16	2023-12-03	1	2	11
+17	2023-12-10	1	4	11
+18	2023-12-10	2	2	11
+19	2023-12-18	15	2	7
+20	2024-02-24	18	4	7
+21	2024-02-24	19	2	7
+22	2024-11-19	2	4	11
+23	2024-11-19	21	2	6
+24	2025-01-02	14	4	6
+25	2025-09-04	15	4	7
+26	2025-09-04	23	2	4
+27	2025-09-11	23	4	4
+28	2025-09-11	3	2	6
+29	2025-09-30	3	4	6
+30	2025-09-30	4	2	6
+31	2025-11-13	4	4	6
+32	2025-11-13	8	2	7
+33	2025-12-11	19	4	7
+34	2025-12-11	20	2	7
+35	2026-01-10	21	4	6
+36	2026-05-14	20	4	7
+37	2026-05-22	9	4	6
+38	2026-05-22	10	2	1
+39	2026-06-05	10	4	1
+40	2026-06-05	11	2	11
+41	2026-06-06	8	4	7
+42	2026-06-06	24	2	7
+43	2026-06-10	11	4	11
+44	2026-06-10	12	2	11
+45	2026-07-25	24	4	7
+46	2026-08-25	12	4	11
+47	2026-08-25	25	2	6
+48	2026-09-20	25	4	6
+49	2026-09-20	16	2	7
+50	2027-07-17	16	4	7
+\.
+
+
+--
+-- TOC entry 3471 (class 0 OID 16460)
+-- Dependencies: 229
+-- Data for Name: operation; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.operation (id, op_name, start_date, step_id, gr_id) FROM stdin;
+1	Проведение закупок	2022-12-27	9	1
+2	Опыты с коррозией металлов	2023-01-06	2	3
+3	Проведение закупок	2023-05-22	4	2
+4	Расчёт сопротивления	2023-06-03	1	5
+5	Проведение закупок	2023-07-28	8	1
+6	Расчёт сопротивления	2023-08-06	12	4
+7	Проведение закупок	2023-09-03	7	2
+8	Измерение трения подшипников	2023-09-11	3	3
+9	Расчёт тепловыделения	2023-10-15	12	4
+10	Расчёт тепловыделения	2023-12-03	1	5
+11	Разработка чертежей	2023-12-10	14	5
+12	Эксперименты с магнитными полями	2023-12-18	2	4
+13	Разработка чертежей	2024-02-24	13	4
+14	Сборка физического прототипа	2024-11-19	14	3
+15	Проведение закупок	2025-09-04	15	2
+16	Расчёт сопротивления	2025-09-11	5	3
+17	Расчёт тепловыделения	2025-09-30	5	3
+18	Разработка чертежей	2025-11-13	6	4
+19	Сборка физического прототипа	2025-12-11	13	4
+20	Проведение закупок	2026-05-22	16	1
+21	Расчёт сопротивления	2026-06-05	10	5
+22	Сборка физического прототипа	2026-06-06	6	4
+23	Расчёт тепловыделения	2026-06-10	10	5
+24	Разработка чертежей	2026-08-25	11	3
+25	Сборка физического прототипа	2026-09-20	11	4
+\.
+
+
+--
+-- TOC entry 3460 (class 0 OID 16390)
+-- Dependencies: 218
+-- Data for Name: project; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.project (id, pr_name, appl_field, s_date) FROM stdin;
+1	FG-727	Атомная энергетика	2022-12-27
+2	AD-134	Атомная энергетика	2023-05-22
+3	KL-986	Металлургия	2023-07-28
+4	RG-988	Металлургия	2023-09-03
+\.
+
+
+--
+-- TOC entry 3465 (class 0 OID 16427)
+-- Dependencies: 223
+-- Data for Name: stage; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.stage (id, stg_name, start_date, end_date, pr_id) FROM stdin;
+1	Проведение исследований	2022-12-27	2025-09-04	2
+2	Разработка прототипа	2023-05-22	2026-01-10	1
+3	Разработка прототипа	2023-07-28	2026-05-14	4
+4	Проведение исследований	2023-09-03	2026-05-22	3
+5	Разработка прототипа	2025-09-04	2026-07-25	2
+6	Разработка прототипа	2026-05-22	2027-07-17	3
+\.
+
+
+--
+-- TOC entry 3475 (class 0 OID 16489)
+-- Dependencies: 233
+-- Data for Name: status; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.status (id, value) FROM stdin;
+1	В очереди
+2	В работе
+3	Приостановлена
+4	Выполнена
+5	Отменена
+\.
+
+
+--
+-- TOC entry 3467 (class 0 OID 16439)
+-- Dependencies: 225
+-- Data for Name: step; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.step (id, step_name, start_date, end_date, stg_id) FROM stdin;
+1	Организация снабжения	2022-12-27	2023-01-06	1
+2	Организация снабжения	2023-05-22	2023-06-03	2
+3	Организация снабжения	2023-07-28	2023-08-06	3
+4	Организация снабжения	2023-09-03	2023-09-11	4
+5	Проведение расчётов	2023-09-11	2023-12-10	2
+6	Проведение расчётов	2023-12-10	2024-02-24	3
+7	Проведение экспериментов	2024-02-24	2025-09-04	1
+8	Организация снабжения	2025-09-04	2025-09-11	5
+9	Проведение расчётов	2025-09-11	2025-11-13	5
+10	Конструирование прототипа	2025-11-13	2026-01-10	2
+11	Конструирование прототипа	2026-01-10	2026-05-14	3
+12	Проведение экспериментов	2026-05-14	2026-05-22	4
+13	Организация снабжения	2026-05-22	2026-06-05	6
+14	Конструирование прототипа	2026-06-05	2026-07-25	5
+15	Проведение расчётов	2026-07-25	2026-08-25	6
+16	Конструирование прототипа	2026-08-25	2027-07-17	6
+\.
+
+
+--
+-- TOC entry 3495 (class 0 OID 0)
+-- Dependencies: 236
+-- Name: education_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.education_id_seq', 1, false);
+
+
+--
+-- TOC entry 3496 (class 0 OID 0)
+-- Dependencies: 226
+-- Name: empl_group_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.empl_group_id_seq', 1, false);
+
+
+--
+-- TOC entry 3497 (class 0 OID 0)
+-- Dependencies: 230
+-- Name: employee_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.employee_id_seq', 1, false);
+
+
+--
+-- TOC entry 3498 (class 0 OID 0)
+-- Dependencies: 234
+-- Name: op_stat_change_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.op_stat_change_id_seq', 1, false);
+
+
+--
+-- TOC entry 3499 (class 0 OID 0)
+-- Dependencies: 228
+-- Name: operation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.operation_id_seq', 1, false);
+
+
+--
+-- TOC entry 3500 (class 0 OID 0)
+-- Dependencies: 217
+-- Name: project_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.project_id_seq', 1, false);
+
+
+--
+-- TOC entry 3501 (class 0 OID 0)
+-- Dependencies: 222
+-- Name: stage_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.stage_id_seq', 1, false);
+
+
+--
+-- TOC entry 3502 (class 0 OID 0)
+-- Dependencies: 232
+-- Name: status_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.status_id_seq', 1, false);
+
+
+--
+-- TOC entry 3503 (class 0 OID 0)
+-- Dependencies: 224
+-- Name: step_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.step_id_seq', 1, false);
+
+
+--
+-- TOC entry 3282 (class 2606 OID 16420)
+-- Name: cont_pow_supply_unit cpsu_type_model; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cont_pow_supply_unit
+    ADD CONSTRAINT cpsu_type_model PRIMARY KEY (t_code, m_code);
+
+
+--
+-- TOC entry 3278 (class 2606 OID 16400)
+-- Name: device device_type_model; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.device
+    ADD CONSTRAINT device_type_model PRIMARY KEY (t_code, m_code);
+
+
+--
+-- TOC entry 3280 (class 2606 OID 16410)
+-- Name: drive_freq_conv dfc_type_model; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.drive_freq_conv
+    ADD CONSTRAINT dfc_type_model PRIMARY KEY (t_code, m_code);
+
+
+--
+-- TOC entry 3298 (class 2606 OID 16525)
+-- Name: education education_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.education
+    ADD CONSTRAINT education_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3300 (class 2606 OID 16530)
+-- Name: empl_edu_list empl_edu_list_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.empl_edu_list
+    ADD CONSTRAINT empl_edu_list_pk PRIMARY KEY (edu_id, empl_id);
+
+
+--
+-- TOC entry 3288 (class 2606 OID 16458)
+-- Name: empl_group empl_group_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.empl_group
+    ADD CONSTRAINT empl_group_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3292 (class 2606 OID 16482)
+-- Name: employee employee_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.employee
+    ADD CONSTRAINT employee_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3296 (class 2606 OID 16501)
+-- Name: op_stat_change op_stat_change_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.op_stat_change
+    ADD CONSTRAINT op_stat_change_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3290 (class 2606 OID 16465)
+-- Name: operation operation_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.operation
+    ADD CONSTRAINT operation_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3276 (class 2606 OID 16395)
+-- Name: project project_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.project
+    ADD CONSTRAINT project_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3284 (class 2606 OID 16432)
+-- Name: stage stage_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.stage
+    ADD CONSTRAINT stage_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3294 (class 2606 OID 16494)
+-- Name: status status_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.status
+    ADD CONSTRAINT status_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3286 (class 2606 OID 16444)
+-- Name: step step_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.step
+    ADD CONSTRAINT step_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3303 (class 2606 OID 16421)
+-- Name: cont_pow_supply_unit cont_pow_supply_unit_t_code_m_code_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cont_pow_supply_unit
+    ADD CONSTRAINT cont_pow_supply_unit_t_code_m_code_fkey FOREIGN KEY (t_code, m_code) REFERENCES public.device(t_code, m_code);
+
+
+--
+-- TOC entry 3301 (class 2606 OID 16401)
+-- Name: device device_pr_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.device
+    ADD CONSTRAINT device_pr_id_fkey FOREIGN KEY (pr_id) REFERENCES public.project(id);
+
+
+--
+-- TOC entry 3302 (class 2606 OID 16411)
+-- Name: drive_freq_conv drive_freq_conv_t_code_m_code_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.drive_freq_conv
+    ADD CONSTRAINT drive_freq_conv_t_code_m_code_fkey FOREIGN KEY (t_code, m_code) REFERENCES public.device(t_code, m_code);
+
+
+--
+-- TOC entry 3312 (class 2606 OID 16531)
+-- Name: empl_edu_list empl_edu_list_edu_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.empl_edu_list
+    ADD CONSTRAINT empl_edu_list_edu_id_fkey FOREIGN KEY (edu_id) REFERENCES public.education(id);
+
+
+--
+-- TOC entry 3313 (class 2606 OID 16536)
+-- Name: empl_edu_list empl_edu_list_empl_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.empl_edu_list
+    ADD CONSTRAINT empl_edu_list_empl_id_fkey FOREIGN KEY (empl_id) REFERENCES public.employee(id);
+
+
+--
+-- TOC entry 3308 (class 2606 OID 16483)
+-- Name: employee employee_gr_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.employee
+    ADD CONSTRAINT employee_gr_id_fkey FOREIGN KEY (gr_id) REFERENCES public.empl_group(id);
+
+
+--
+-- TOC entry 3309 (class 2606 OID 16512)
+-- Name: op_stat_change op_stat_change_empl_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.op_stat_change
+    ADD CONSTRAINT op_stat_change_empl_id_fkey FOREIGN KEY (empl_id) REFERENCES public.employee(id);
+
+
+--
+-- TOC entry 3310 (class 2606 OID 16502)
+-- Name: op_stat_change op_stat_change_op_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.op_stat_change
+    ADD CONSTRAINT op_stat_change_op_id_fkey FOREIGN KEY (op_id) REFERENCES public.operation(id);
+
+
+--
+-- TOC entry 3311 (class 2606 OID 16507)
+-- Name: op_stat_change op_stat_change_stat_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.op_stat_change
+    ADD CONSTRAINT op_stat_change_stat_id_fkey FOREIGN KEY (stat_id) REFERENCES public.status(id);
+
+
+--
+-- TOC entry 3306 (class 2606 OID 16471)
+-- Name: operation operation_gr_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.operation
+    ADD CONSTRAINT operation_gr_id_fkey FOREIGN KEY (gr_id) REFERENCES public.empl_group(id);
+
+
+--
+-- TOC entry 3307 (class 2606 OID 16466)
+-- Name: operation operation_step_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.operation
+    ADD CONSTRAINT operation_step_id_fkey FOREIGN KEY (step_id) REFERENCES public.step(id);
+
+
+--
+-- TOC entry 3304 (class 2606 OID 16433)
+-- Name: stage stage_pr_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.stage
+    ADD CONSTRAINT stage_pr_id_fkey FOREIGN KEY (pr_id) REFERENCES public.project(id);
+
+
+--
+-- TOC entry 3305 (class 2606 OID 16445)
+-- Name: step step_stg_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.step
+    ADD CONSTRAINT step_stg_id_fkey FOREIGN KEY (stg_id) REFERENCES public.stage(id);
+
+
+-- Completed on 2025-05-24 14:29:58 UTC
+
+--
+-- PostgreSQL database dump complete
+--
+

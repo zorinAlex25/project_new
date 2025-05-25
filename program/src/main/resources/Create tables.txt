@@ -1,0 +1,132 @@
+Создаём таблицу приводных преобразователей частоты, связанную с таблицей устройств
+CREATE TABLE drive_freq_conv(
+t_code int, -- код типа
+m_code int, -- код модели
+in_cur_frequency int, -- входная частота тока
+out_cur_frequency int, -- выходная частота тока
+
+CONSTRAINT DFC_type_model
+PRIMARY KEY(t_code, m_code),
+-- делаем из типа и модели первичный ключ
+
+FOREIGN KEY (t_code, m_code) REFERENCES Device(t_code, m_code)
+-- привязываем ключ типа и модели к таблице устройств
+)
+
+Создаём таблицу непрерывных источников питания, связанную с таблицей устройств
+CREATE TABLE Cont_pow_supply_unit(
+-- Бесперебойный источник питания
+t_code int, -- код типа
+m_code int, -- код модели
+cur_frequency int, -- входная частота тока
+
+CONSTRAINT CPSU_type_model
+PRIMARY KEY(t_code, m_code),
+-- делаем из типа и модели первичный ключ
+
+FOREIGN KEY (t_code, m_code) REFERENCES Device(t_code, m_code)
+-- привязываем ключ типа и модели к таблице устройств
+)
+
+Создаём таблицу стадий, связанную с таблицей проектов
+CREATE TABLE Stage( -- стадия
+id SERIAL PRIMARY KEY, -- код стадии
+stg_name varchar(200), -- название стадии
+Start_date date,
+End_date date,
+pr_id INT,
+
+FOREIGN KEY (pr_id) REFERENCES Project(id)
+-- привязываем ключ проекта к таблице проектов
+)
+
+Создаём таблицу этапов, связанную с таблицей стадий
+CREATE TABLE Step( -- этап
+id SERIAL PRIMARY KEY, -- код этапа
+step_name varchar(200), -- название этапа
+start_date date,
+end_date date,
+stg_id INT,
+
+FOREIGN KEY (stg_id) REFERENCES Stage(id)
+-- привязываем ключ проекта к таблице проектов
+)
+
+Создаём таблицу групп
+CREATE TABLE empl_group( -- группа сотрудников
+id SERIAL PRIMARY KEY, -- код группы
+purpose varchar(500), -- название группы
+gr_name varchar(500) -- название группы
+)
+
+Создаём таблицу процедур, связанную с таблицами этапов и групп
+CREATE TABLE operation( -- процедура
+id SERIAL PRIMARY KEY, -- код процедуры
+op_name VARCHAR(200), -- название процедуры
+start_date date,
+step_id int,
+gr_id int,
+
+FOREIGN KEY (step_id) REFERENCES Step(id),
+-- привязываем ключ этапа к таблице проектов
+FOREIGN KEY (gr_id) REFERENCES empl_group(id)
+-- привязываем ключ группы к таблице проектов
+)
+
+Создаём таблицу работников, связанную с таблицей групп
+CREATE TABLE employee( -- работник
+id SERIAL PRIMARY KEY, -- код работника
+empl_name VARCHAR(100), -- имя работника
+empl_surname VARCHAR(100), -- фамилия работника
+empl_patronymic VARCHAR (100), -- отчество работника
+
+payment int, -- з/п
+experience int,
+-- стаж - расчитывается сторонним ПО и постоянно вносится в БД
+gr_id int, -- код группы
+
+FOREIGN KEY (gr_id) REFERENCES empl_group(id)
+-- привязываем ключ группы к таблице групп
+)
+
+Создаём таблицу статусов
+CREATE TABLE status(
+id SERIAL PRIMARY KEY,
+value VARCHAR(100)
+)
+
+Создаём таблицу изменений статусов операций, связанную с таблицами операций (процедур), статусов и сотрудников
+CREATE TABLE op_stat_change (
+id SERIAL PRIMARY KEY,
+cng_date date, -- дата изменения статуса
+op_id int, -- ключ операции (процедуры)
+stat_id int, -- ключ статуса
+empl_id int, -- ключ работника
+
+FOREIGN KEY (op_id) REFERENCES operation(id),
+-- привязываем ключ операции (процедуры) к таблице операций
+FOREIGN KEY (stat_id) REFERENCES status(id),
+-- привязываем ключ статуса к таблице статусов
+FOREIGN KEY (empl_id) REFERENCES employee(id)
+-- привязываем ключ работника к таблице работников
+)
+
+
+Создаём таблицу образований
+CREATE TABLE education(
+id SERIAL PRIMARY KEY,
+qualification varchar(5000),
+training varchar(5000)
+)
+
+Создаём таблицу-список образований у сотрудников, связанную с таблицами образований и сотрудников
+CREATE TABLE empl_edu_list( -- список образований у сотрудников
+edu_id INT, -- ключ образования
+empl_id INT, -- ключ сотрудника
+
+CONSTRAINT empl_edu_list_PK
+PRIMARY KEY (edu_id, empl_id),
+
+FOREIGN KEY (edu_id) REFERENCES education,
+FOREIGN KEY (empl_id) REFERENCES employee
+)
