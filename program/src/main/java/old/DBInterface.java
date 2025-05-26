@@ -218,8 +218,8 @@ public class DBInterface extends JFrame {
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Некорректное число: " + ex.getMessage(), "Ошибка", JOptionPane.ERROR_MESSAGE);
             } catch (SQLException e) {
-                // JOptionPane.showMessageDialog(this, "Ошибка выполнения запроса: " + e.getMessage(), "Ошибка", JOptionPane.ERROR_MESSAGE);
-                throw new RuntimeException(e);
+                JOptionPane.showMessageDialog(this, "Ошибка выполнения запроса: " + e.getMessage(), "Ошибка", JOptionPane.ERROR_MESSAGE);
+                // throw new RuntimeException(e);
             }
         }
     }
@@ -351,8 +351,14 @@ public class DBInterface extends JFrame {
                         "WHERE price >= ?", Query.TYPE_READ, List.of(minPrice)));
 
         ParameterTemplate qualification = new ParameterTemplate("Квалификация", ParameterTemplate.TYPE_STRING);
-        queries.add(new ProcedureQuery("Удалить все образования по квалификации",
-                "DO $$\n" +
+        /*
+        stmt.execute("CREATE OR REPLACE PROCEDURE commitproc(a INOUT bigint) AS '" +
+        " BEGIN " +
+        "    INSERT INTO temp_val values(a); " +
+        "    COMMIT; " +
+        " END;' LANGUAGE plpgsql");
+         */
+        queries.add(new CursorQuery("Удалить все образования по квалификации",
                         "DECLARE\n" +
                         "  r int;\n" +
                         "  str character varying(5000);\n" +
@@ -364,7 +370,7 @@ public class DBInterface extends JFrame {
                         "    DELETE FROM empl_edu_list WHERE edu_id = r;\n" +
                         "    DELETE FROM education WHERE id = r;\n" +
                         "  END LOOP;\n" +
-                        "END $$;\n",
+                        "END;\n",
                 Query.TYPE_DELETE,
                 List.of(qualification),"remove_edu_by_qual"));
 

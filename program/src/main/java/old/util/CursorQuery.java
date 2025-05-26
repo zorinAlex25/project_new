@@ -3,7 +3,7 @@ package old.util;
 import java.sql.*;
 import java.util.List;
 
-public class ProcedureQuery extends Query{
+public class CursorQuery extends Query{
     /**
      * type:
      * C - create,
@@ -18,7 +18,7 @@ public class ProcedureQuery extends Query{
      */
     private String functionName; // название процедуры вместе с переменными
 
-    public ProcedureQuery(String name, String queryString, Character type, List<ParameterTemplate> requiredParamsTemplates, String functionName) {
+    public CursorQuery(String name, String queryString, Character type, List<ParameterTemplate> requiredParamsTemplates, String functionName) {
         super(name, queryString, type, requiredParamsTemplates);
         this.functionName = functionName;
     }
