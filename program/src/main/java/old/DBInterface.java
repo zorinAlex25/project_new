@@ -358,7 +358,7 @@ public class DBInterface extends JFrame {
         "    COMMIT; " +
         " END;' LANGUAGE plpgsql");
          */
-        queries.add(new CursorQuery("Удалить все образования по квалификации",
+        queries.add(new ProcedureQuery("Удалить все образования по квалификации",
                         "DECLARE\n" +
                         "  r int;\n" +
                         "  str character varying(5000);\n" +
