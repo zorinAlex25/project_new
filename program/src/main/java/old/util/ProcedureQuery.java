@@ -1,7 +1,6 @@
 package old.util;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 
 public class ProcedureQuery extends Query{
@@ -25,11 +24,35 @@ public class ProcedureQuery extends Query{
     }
 
     @Override
-    public void getStatement(Connection connection, List<Parameter> params) throws SQLException {
+    public ResultSet executeQuery(Connection conn, List<Parameter> params) throws SQLException {
+        String fun = "CREATE OR REPLACE FUNCTION " + functionName + "(" + paramsAsQueryElement() + ")";
+        fun = fun + "RETURNS refcursor AS '" + queryString + "'";
+        Statement stmt = conn.createStatement();
+        stmt.execute(fun);
+        stmt.close();
+        conn.setAutoCommit(false);
 
+        CallableStatement func = conn.prepareCall("{? = call " + functionName + "() }");
+        func.registerOutParameter(1, Types.OTHER);
+        func.execute();
+        ResultSet results = (ResultSet) func.getObject(1);
+        return results;
     }
-
-    public String getFunctionName() {
+    private String paramsAsQueryElement(){
+        String res = "";
+        for (int i = 0; i < requiredParamsTemplates.size() - 1; i++)
+        {
+            ParameterTemplate paramTemplate = requiredParamsTemplates.get(i);
+            String paramStr = paramTemplate.getName() + paramTemplate.getVarTypeAsString()
+                    + " "+paramTemplate.getInOutType() + ", ";
+            res = res + paramStr;
+        }
+        ParameterTemplate paramTemplate = requiredParamsTemplates.get(requiredParamsTemplates.size() - 1);
+        res = res + paramTemplate.getName() + paramTemplate.getVarTypeAsString()
+                + " "+paramTemplate.getInOutType();
+        return res;
+    }
+    private String getFunctionName() {
         return functionName;
     }
 }

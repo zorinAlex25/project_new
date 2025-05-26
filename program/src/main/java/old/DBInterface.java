@@ -205,7 +205,7 @@ public class DBInterface extends JFrame {
                     List<Parameter> params = new ArrayList<>();
                     if (parameterTemplates != null) {
                         for (int i = 0; i < parameterTemplates.size(); i++) {
-                            params.add(new Parameter(parameterTemplates.get(i).getType(), inputFields.get(i).getText().trim()));
+                            params.add(new Parameter(parameterTemplates.get(i).getVarType(), inputFields.get(i).getText().trim()));
                         }
                     }
                     Connection connection = DriverManager.getConnection(Main.DATABASE_URL, Main.USER_NAME, Main.DATABASE_PASS);

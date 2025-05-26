@@ -1,6 +1,8 @@
 package old.util;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -22,7 +24,16 @@ public class SimpleQuery extends Query{
     }
 
     @Override
-    public void getStatement(Connection connection, List<Parameter> params) throws SQLException {
-
+    public ResultSet executeQuery(Connection connection, List<Parameter> params) throws SQLException {
+        paramQuantityCheck(params); // проверка кол-ва параметров
+        PreparedStatement statement = connection.prepareStatement(this.queryString);
+        statement = setParamsToStatement(statement, params);
+        ResultSet rs;
+        if (this.getType() == Query.TYPE_DELETE || this.getType() == Query.TYPE_UPDATE){ // Query.TYPE_CREATE
+            statement.executeUpdate();
+            return null;
+        } else {
+            return statement.executeQuery();
+        }
     }
 }
