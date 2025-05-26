@@ -218,8 +218,8 @@ public class DBInterface extends JFrame {
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Некорректное число: " + ex.getMessage(), "Ошибка", JOptionPane.ERROR_MESSAGE);
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(this, "Ошибка выполнения запроса: " + e.getMessage(), "Ошибка", JOptionPane.ERROR_MESSAGE);
-                // throw new RuntimeException(e);
+                // JOptionPane.showMessageDialog(this, "Ошибка выполнения запроса: " + e.getMessage(), "Ошибка", JOptionPane.ERROR_MESSAGE);
+                throw new RuntimeException(e);
             }
         }
     }
@@ -241,11 +241,10 @@ public class DBInterface extends JFrame {
         return (ResultSet) callableStatement.getObject(1);
     }
     private void displayResultSet(ResultSet rs) throws SQLException {
-        if (rs == null || !rs.next()){
+        if (rs == null){
             System.out.println("rs = null");
             return;
         }
-        rs.beforeFirst();
         System.out.println("rs != null");
         ResultSetMetaData metaData = rs.getMetaData();
         int columnCount = metaData.getColumnCount();

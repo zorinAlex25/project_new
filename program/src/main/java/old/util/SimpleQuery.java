@@ -32,7 +32,8 @@ public class SimpleQuery extends Query{
             statement.executeUpdate();
             return null;
         } else {
-            return statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery();
+            return resultSet;
         }
     }
 }

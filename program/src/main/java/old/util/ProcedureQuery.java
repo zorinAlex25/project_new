@@ -27,9 +27,9 @@ public class ProcedureQuery extends Query{
     public ResultSet executeQuery(Connection conn, List<Parameter> params) throws SQLException {
         String fun = "CREATE OR REPLACE FUNCTION " + functionName + "(" + paramsAsQueryElement() + ")";
         fun = fun + "RETURNS refcursor AS '" + queryString + "'";
-        Statement stmt = conn.createStatement();
-        stmt.execute(fun);
-        stmt.close();
+        Statement statement = conn.createStatement();
+        statement.execute(fun);
+        statement.close();
         conn.setAutoCommit(false);
 
         CallableStatement func = conn.prepareCall("{? = call " + functionName + "(" + paramsAsQueryElement() + ")}");
