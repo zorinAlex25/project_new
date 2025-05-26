@@ -212,15 +212,7 @@ public class DBInterface extends JFrame {
 
                     ResultSet resultSet;
                     System.out.println(selectedQuery.getType());
-                    if (selectedQuery.getHasCursor()){
-                        System.out.println("Query With Cursor");
-                        CallableStatement statement = (CallableStatement) selectedQuery.getPreparedStatement(connection,params);
-                        resultSet = handleAStatement(selectedQuery, statement);
-                    } else {
-                        System.out.println("Query Without Cursor");
-                        PreparedStatement statement = selectedQuery.getPreparedStatement(connection, params);
-                        resultSet = handleAStatement(selectedQuery, statement);
-                    }
+                    resultSet = selectedQuery.executeQuery(connection, params);
                     displayResultSet(resultSet);
                 }
             } catch (NumberFormatException ex) {

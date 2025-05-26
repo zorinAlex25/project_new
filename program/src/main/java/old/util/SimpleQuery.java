@@ -28,7 +28,6 @@ public class SimpleQuery extends Query{
         paramQuantityCheck(params); // проверка кол-ва параметров
         PreparedStatement statement = connection.prepareStatement(this.queryString);
         statement = setParamsToStatement(statement, params);
-        ResultSet rs;
         if (this.getType() == Query.TYPE_DELETE || this.getType() == Query.TYPE_UPDATE){ // Query.TYPE_CREATE
             statement.executeUpdate();
             return null;

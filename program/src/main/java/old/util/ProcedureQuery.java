@@ -48,7 +48,7 @@ public class ProcedureQuery extends Query{
         }
         ParameterTemplate paramTemplate = requiredParamsTemplates.get(requiredParamsTemplates.size() - 1);
         res = res + paramTemplate.getNameAsWholeString() + paramTemplate.getVarTypeAsString()
-                + " "+paramTemplate.getInOutType();
+                + " " + paramTemplate.getInOutType();
         return res;
     }
     private String getFunctionName() {
