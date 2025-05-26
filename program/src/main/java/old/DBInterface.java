@@ -224,23 +224,6 @@ public class DBInterface extends JFrame {
             }
         }
     }
-    private ResultSet handleAStatement(Query selectedQuery, PreparedStatement preparedStatement) throws SQLException {
-        if (Character.toString(selectedQuery.getType()).equalsIgnoreCase("U") ||
-                Character.toString(selectedQuery.getType()).equalsIgnoreCase("D")) {
-            preparedStatement.executeUpdate();
-            return null; // Для DELETE/UPDATE не возвращаем ResultSet
-        }
-        return preparedStatement.executeQuery();
-    }
-    private ResultSet handleAStatement(Query selectedQuery, CallableStatement callableStatement) throws SQLException {
-        System.out.println("Callable Statement handled");
-        if (Character.toString(selectedQuery.getType()).equalsIgnoreCase("U")) {
-            return null;
-        }
-        callableStatement.registerOutParameter(1, Types.OTHER); // Cursor is of type "OTHER"
-        callableStatement.execute();
-        return (ResultSet) callableStatement.getObject(1);
-    }
     private void displayResultSet(ResultSet rs) throws SQLException {
         if (rs == null) {
             return;
