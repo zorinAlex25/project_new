@@ -148,7 +148,7 @@ public class DBInterface extends JFrame {
 
     private Query selectQueryByName(String queryName) {
         for (Query query : queries) {
-            if (queryName.equalsIgnoreCase(query.getName())) {
+            if (queryName.equalsIgnoreCase(query.getQueryName())) {
                 return query;
             }
         }
@@ -396,7 +396,7 @@ public class DBInterface extends JFrame {
                         "  END LOOP;\n" +
                         "END $$;\n",
                 Query.TYPE_DELETE,
-                List.of(qualification)));
+                List.of(qualification),""));
         /*
         queries.add(new Query("Удалить все образования по квалификации", // !!!!!!!!
                 "DO $$\n" +
@@ -434,7 +434,7 @@ public class DBInterface extends JFrame {
         String[] queryNames = new String[queries.size() + 1];
         queryNames[0] = "Свой запрос (только вывод данных)";
         for (int i = 1; i < queries.size() + 1; i++) {
-            queryNames[i] = queries.get(i - 1).getName();
+            queryNames[i] = queries.get(i - 1).getQueryName();
         }
         return queryNames;
     }

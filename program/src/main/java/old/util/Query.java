@@ -4,7 +4,7 @@ import java.sql.*;
 import java.util.List;
 
 public abstract class Query {
-    protected String name; // название запроса
+    protected String queryName; // название запроса
     protected String queryString; // хранит сам SQL-запрос в виде строки
     protected List<ParameterTemplate> requiredParamsTemplates; // хранит типы параметров
     protected List<Parameter> params; // хранит параметры
@@ -24,8 +24,8 @@ public abstract class Query {
     D - delete
      **/
 
-    public Query(String name, String queryString, Character type, List<ParameterTemplate> requiredParamsTemplates) {
-        this.name = name;
+    public Query(String queryName, String queryString, Character type, List<ParameterTemplate> requiredParamsTemplates) {
+        this.queryName = queryName;
         this.queryString = queryString;
         this.params = null;
         this.type = type;
@@ -83,8 +83,8 @@ public abstract class Query {
     public Character getType() {
         return type;
     }
-    public String getName() {
-        return name;
+    public String getQueryName() {
+        return queryName;
     }
     public String getQueryString() {
         return queryString;

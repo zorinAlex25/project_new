@@ -17,8 +17,10 @@ public class ProcedureQuery extends Query{
      * @param type
      * @param requiredParamsTemplates
      */
-    public ProcedureQuery(String name, String queryString, Character type, List<ParameterTemplate> requiredParamsTemplates) {
+    private String functionName;
+    public ProcedureQuery(String name, String queryString, Character type, List<ParameterTemplate> requiredParamsTemplates, String functionName) {
         super(name, queryString, type, requiredParamsTemplates);
+        this.functionName = "";
     }
 
     @Override
