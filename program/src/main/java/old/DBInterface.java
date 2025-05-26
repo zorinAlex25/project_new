@@ -200,7 +200,6 @@ public class DBInterface extends JFrame {
                     displayResultSet(resultSet);
                 } else {
                     Query selectedQuery = selectQueryByName(selectedQueryName);
-
                     List<ParameterTemplate> parameterTemplates = selectedQuery.getRequiredParamsTemplates();
                     List<Parameter> params = new ArrayList<>();
                     if (parameterTemplates != null) {
@@ -209,27 +208,29 @@ public class DBInterface extends JFrame {
                         }
                     }
                     Connection connection = DriverManager.getConnection(Main.DATABASE_URL, Main.USER_NAME, Main.DATABASE_PASS);
+                    ResultSet resultSet = selectedQuery.executeQuery(connection, params);
 
-                    ResultSet resultSet;
-                    System.out.println(selectedQuery.getType());
-                    resultSet = selectedQuery.executeQuery(connection, params);
-                    displayResultSet(resultSet);
+                    // Проверяем тип запроса перед отображением результата
+                    if (selectedQuery.getType() == Query.TYPE_DELETE || selectedQuery.getType() == Query.TYPE_UPDATE) {
+                        JOptionPane.showMessageDialog(this, "Запрос выполнен успешно", "Успех", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        displayResultSet(resultSet);
+                    }
                 }
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Некорректное число: " + ex.getMessage(), "Ошибка", JOptionPane.ERROR_MESSAGE);
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(this, "Ошибка выполнения запроса: " + e.getMessage(), "Ошибка", JOptionPane.ERROR_MESSAGE);
-                // throw new RuntimeException(e);
             }
         }
     }
-    private ResultSet handleAStatement (Query selectedQuery, PreparedStatement preparedStatement) throws SQLException {
-        if (selectedQuery.getType() == Query.TYPE_DELETE || selectedQuery.getType() == Query.TYPE_UPDATE){
+    private ResultSet handleAStatement(Query selectedQuery, PreparedStatement preparedStatement) throws SQLException {
+        if (Character.toString(selectedQuery.getType()).equalsIgnoreCase("U") ||
+                Character.toString(selectedQuery.getType()).equalsIgnoreCase("D")) {
             preparedStatement.executeUpdate();
-            return null;
-        } else {
-            return preparedStatement.executeQuery();
+            return null; // Для DELETE/UPDATE не возвращаем ResultSet
         }
+        return preparedStatement.executeQuery();
     }
     private ResultSet handleAStatement(Query selectedQuery, CallableStatement callableStatement) throws SQLException {
         System.out.println("Callable Statement handled");
@@ -241,20 +242,19 @@ public class DBInterface extends JFrame {
         return (ResultSet) callableStatement.getObject(1);
     }
     private void displayResultSet(ResultSet rs) throws SQLException {
-        if (rs == null){
-            System.out.println("rs = null");
+        if (rs == null) {
             return;
         }
-        System.out.println("rs != null");
         ResultSetMetaData metaData = rs.getMetaData();
         int columnCount = metaData.getColumnCount();
-
+        if (columnCount == 0) {
+            JOptionPane.showMessageDialog(this, "Нет данных для отображения", "Информация", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
         DefaultTableModel model = new DefaultTableModel();
         for (int i = 1; i <= columnCount; i++) {
             model.addColumn(metaData.getColumnName(i));
         }
-
-
         while (rs.next()) {
             Object[] row = new Object[columnCount];
             for (int i = 1; i <= columnCount; i++) {

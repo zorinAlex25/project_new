@@ -26,9 +26,13 @@ public class ProcedureQuery extends Query {
 
     @Override
     public ResultSet executeQuery(Connection connection, List<Parameter> params) throws SQLException {
+        connection.setAutoCommit(false);
+
         CallableStatement callableStatement = connection.prepareCall(this.queryString);
         setParamsToStatement(callableStatement, params);
         callableStatement.execute();
+
+        connection.commit();
         return callableStatement.getObject(1, ResultSet.class); // Получаем результат как ResultSet
     }
 }
