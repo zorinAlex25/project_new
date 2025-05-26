@@ -359,20 +359,21 @@ public class DBInterface extends JFrame {
         " END;' LANGUAGE plpgsql");
          */
         queries.add(new ProcedureQuery("Удалить все образования по квалификации",
+                "DO $$\n" +
                         "DECLARE\n" +
                         "  r int;\n" +
                         "  str character varying(5000);\n" +
                         "BEGIN\n" +
-                        "  -- Получаем параметр через SELECT INTO\n" +
                         "  SELECT $1 INTO str;\n" +
                         "  FOR r IN SELECT id FROM education WHERE qualification = str\n" +
                         "  LOOP\n" +
                         "    DELETE FROM empl_edu_list WHERE edu_id = r;\n" +
                         "    DELETE FROM education WHERE id = r;\n" +
                         "  END LOOP;\n" +
-                        "END;\n",
+                        "END $$;",
                 Query.TYPE_DELETE,
-                List.of(qualification),"remove_edu_by_qual"));
+                List.of(qualification),
+                "remove_edu_by_qual"));
 
         ParameterTemplate workerID = new ParameterTemplate("ID работника",ParameterTemplate.TYPE_INT);
         queries.add(new SimpleQuery("Перевести сотрудника с нужным ID в другую группу",
