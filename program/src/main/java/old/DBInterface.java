@@ -364,7 +364,7 @@ public class DBInterface extends JFrame {
                         "  r int;\n" +
                         "  str character varying(5000);\n" +
                         "BEGIN\n" +
-                        "  SELECT $1 INTO str;\n" +
+                        "  SELECT ? INTO str;\n" +
                         "  FOR r IN SELECT id FROM education WHERE qualification = str\n" +
                         "  LOOP\n" +
                         "    DELETE FROM empl_edu_list WHERE edu_id = r;\n" +
