@@ -42,13 +42,17 @@ public class ParameterTemplate {
                 throw new IllegalArgumentException("Unknown Type");
         }
     }
+    // getNameAsWholeString возвращает название переменной как целую строку
+    public String getNameAsWholeString(){
+        String string = name.trim().replace(".","");
+        return string.replaceAll("\\s+", " ").replaceAll(" ","_");
+    }
     public String getName() {
         return name;
     }
     public char getVarType() {
         return varType;
     }
-
     public String getInOutType()
     {
         return inOutType;

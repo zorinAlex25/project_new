@@ -32,23 +32,22 @@ public class ProcedureQuery extends Query{
         stmt.close();
         conn.setAutoCommit(false);
 
-        CallableStatement func = conn.prepareCall("{? = call " + functionName + "() }");
+        CallableStatement func = conn.prepareCall("{? = call " + functionName + "(" + paramsAsQueryElement() + ")}");
         func.registerOutParameter(1, Types.OTHER);
         func.execute();
-        ResultSet results = (ResultSet) func.getObject(1);
-        return results;
+        return (ResultSet) func.getObject(1);
     }
     private String paramsAsQueryElement(){
         String res = "";
         for (int i = 0; i < requiredParamsTemplates.size() - 1; i++)
         {
             ParameterTemplate paramTemplate = requiredParamsTemplates.get(i);
-            String paramStr = paramTemplate.getName() + paramTemplate.getVarTypeAsString()
+            String paramStr = paramTemplate.getNameAsWholeString() + paramTemplate.getVarTypeAsString()
                     + " "+paramTemplate.getInOutType() + ", ";
             res = res + paramStr;
         }
         ParameterTemplate paramTemplate = requiredParamsTemplates.get(requiredParamsTemplates.size() - 1);
-        res = res + paramTemplate.getName() + paramTemplate.getVarTypeAsString()
+        res = res + paramTemplate.getNameAsWholeString() + paramTemplate.getVarTypeAsString()
                 + " "+paramTemplate.getInOutType();
         return res;
     }
