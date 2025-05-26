@@ -13,14 +13,15 @@ public class ProcedureQuery extends Query{
      * D - delete
      *
      * @param name
-     * @param queryString
+     * @param queryString // здесь это просто код функции
      * @param type
      * @param requiredParamsTemplates
      */
-    private String functionName;
+    private String functionName; // название процедуры вместе с переменными
+
     public ProcedureQuery(String name, String queryString, Character type, List<ParameterTemplate> requiredParamsTemplates, String functionName) {
         super(name, queryString, type, requiredParamsTemplates);
-        this.functionName = "";
+        this.functionName = functionName;
     }
 
     @Override
@@ -28,4 +29,7 @@ public class ProcedureQuery extends Query{
 
     }
 
+    public String getFunctionName() {
+        return functionName;
+    }
 }
