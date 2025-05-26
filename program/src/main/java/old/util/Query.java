@@ -32,6 +32,8 @@ public abstract class Query {
         this.requiredParamsTemplates = requiredParamsTemplates;
     }
 
+    public abstract void getStatement (Connection connection, List<Parameter> params) throws SQLException;
+
     public PreparedStatement getPreparedStatement(Connection connection, List<Parameter> params) throws SQLException {
         paramQuantityCheck(params); // проверка кол-ва параметров
         PreparedStatement statement = connection.prepareStatement(this.queryString);
