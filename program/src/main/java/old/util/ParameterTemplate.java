@@ -15,7 +15,7 @@ public class ParameterTemplate {
 
     private String name;
     private char varType;
-    private String inOutType;
+    private String inOutType = IN; // значение по умолчанию - in
 
     public ParameterTemplate(String name, char varType, String inOutType)
     {

@@ -346,27 +346,6 @@ public class DBInterface extends JFrame {
                 "WHERE stat_id = (SELECT id FROM status WHERE value = 'Выполнена')\n" +
                 "GROUP BY op.id, op.op_name, op.start_date\n" +
                 "ORDER BY op.id;", Query.TYPE_READ, null));
-        /*
-        СТАРЫЙ ВАРИАНТ
-
-        queries.add(new QueryWithCursor("Вывести операции с датами",
-                "DO\n" +
-                        "$$\n" +
-                        "DECLARE\n" +
-                        "t_query text;\n" +
-                        "c_cursor CONSTANT refcursor := '_cursor';\n" +
-                        "id_completed INT;\n" +
-                        "BEGIN\n" +
-                        "SELECT status.id INTO STRICT id_completed FROM status WHERE status.value = 'Выполнена';\n" +
-                        "t_query := 'SELECT op.id AS operation_id, op.op_name AS operation_name, op.start_date AS operation_start_date, MAX(stat_ch.cng_date) AS operation_end_date\n" +
-                        "FROM operation AS op\n" +
-                        "JOIN op_stat_change AS stat_ch ON op.id = stat_ch.op_id\n" +
-                        "WHERE stat_id = $1\n" +
-                        "GROUP BY stat_ch.op_id, operation_start_date, operation_name, operation_id;';\n" +
-                        "OPEN c_cursor FOR EXECUTE t_query USING id_completed;\n" +
-                        "END $$;\n" +
-                        "FETCH ALL FROM _cursor;\n", Query.TYPE_READ, null));
-         */
 
         queries.add(new SimpleQuery("Вывести сотрудников по группе",
                 "SELECT employee.empl_name AS \"name\", employee.empl_surname AS \"surname\", " +
@@ -396,23 +375,7 @@ public class DBInterface extends JFrame {
                         "  END LOOP;\n" +
                         "END $$;\n",
                 Query.TYPE_DELETE,
-                List.of(qualification),""));
-        /*
-        queries.add(new Query("Удалить все образования по квалификации", // !!!!!!!!
-                "DO $$\n" +
-                        "DECLARE\n" +
-                        "r int;\n" +
-                        "str character varying(5000);\n" +
-                        "BEGIN\n" +
-                        "str := ?;\n" +
-                        "FOR r IN SELECT id FROM education WHERE qualification = str\n" +
-                        "LOOP\n" +
-                        "DELETE FROM empl_edu_list WHERE empl_edu_list.edu_id = r;\n" +
-                        "DELETE FROM education WHERE education.id = r;\n" +
-                        "END LOOP;\n" +
-                        "END $$;\n", Query.TYPE_DELETE, List.of(qualification)));
-
-         */
+                List.of(qualification),"remove_edu_by_qual"));
 
         ParameterTemplate workerID = new ParameterTemplate("ID работника",ParameterTemplate.TYPE_INT);
         queries.add(new SimpleQuery("Перевести сотрудника с нужным ID в другую группу",
