@@ -333,7 +333,7 @@ public class DBInterface extends JFrame {
                 "SELECT t_code AS \"type code\", m_code AS \"model code\" FROM device\n" +
                         "WHERE price >= ?", Query.TYPE_READ, List.of(minPrice)));
 
-        ParameterTemplate qualification = new ParameterTemplate("Квалификация", "qualification",
+        ParameterTemplate qualification = new ParameterTemplate("Квалификация", "qualificationVar",
                 ParameterTemplate.TYPE_STRING);
         /*
         stmt.execute("CREATE OR REPLACE PROCEDURE commitproc(a INOUT bigint) AS '" +
@@ -344,18 +344,15 @@ public class DBInterface extends JFrame {
          */
 
         queries.add(new ProcedureQuery("Удалить все образования по квалификации",
-                "DO $$\n" +
                         "DECLARE\n" +
-                        "  r int;\n" +
-                        "  str character varying(5000);\n" +
+                        "  i integer;\n" +
                         "BEGIN\n" +
-                        "  SELECT $1 INTO str;\n" +
-                        "  FOR r IN SELECT id FROM education WHERE qualification = str\n" +
+                        "  FOR i IN SELECT id FROM education WHERE qualification = " + qualification.getNameInLatin() + "\n" +
                         "  LOOP\n" +
-                        "    DELETE FROM empl_edu_list WHERE edu_id = r;\n" +
-                        "    DELETE FROM education WHERE id = r;\n" +
+                        "    DELETE FROM empl_edu_list WHERE edu_id = i;\n" +
+                        "    DELETE FROM education WHERE id = i;\n" +
                         "  END LOOP;\n" +
-                        "END $$;",
+                        "END;",
                 Query.TYPE_DELETE, // null,
                 List.of(qualification),
                 "remove_edu_by_qual"));

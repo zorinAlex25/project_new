@@ -38,7 +38,7 @@ public class ProcedureQuery extends Query
     public ResultSet executeQuery(Connection connection, List<Parameter> params) throws SQLException
     {
         String procedureCreateString = "CREATE OR REPLACE PROCEDURE " + this.procedureName + "("
-                + getParamsInLatin(false) + ") LANGUAGE SQL " +
+                + getParamsInLatin(false) + ") LANGUAGE plpgsql " +
                 "AS $$ " + queryString + " $$;"; // запрос на создание функции
         CallableStatement createProcedure = connection.prepareCall(procedureCreateString);
         createProcedure.execute();
@@ -46,7 +46,7 @@ public class ProcedureQuery extends Query
         String procedureCallString = "CALL " + this.procedureName + "("
                 + getQuestionMarksAsString() + ")";
         CallableStatement callAProcedure = connection.prepareCall(procedureCallString);
-        callAProcedure.setString(1, "Инженер-физик");
+        callAProcedure.setString(1, "Главный инженер");
         callAProcedure.execute();
 
         // setParamsToStatement(createProcedure, params);
@@ -62,7 +62,7 @@ public class ProcedureQuery extends Query
         {
             res = res + "?, ";
         }
-        if (!res.isEmpty())
+        if (!this.requiredParamsTemplates.isEmpty())
         {
             res = res + "?";
         }

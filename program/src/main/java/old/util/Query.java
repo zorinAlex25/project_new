@@ -100,7 +100,7 @@ public abstract class Query
         String param;
         if (paramsQuantity > 0)
         {
-            for (int i = 0; i < paramsQuantity - 1; i++)
+            for (int i = 0; i < paramsQuantity; i++)
             {
                 ParameterTemplate parameterTemplate = this.requiredParamsTemplates.get(i);
                 param = parameterTemplate.getNameInLatin();
