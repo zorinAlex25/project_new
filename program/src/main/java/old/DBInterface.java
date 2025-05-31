@@ -193,9 +193,9 @@ public class DBInterface extends JFrame {
         } else {
             try {
                 if (selectedQueryName.equalsIgnoreCase(queryNames[0])) {
+                    // Свой SQL-запрос
                     Connection connection = DriverManager.getConnection(Main.DATABASE_URL, Main.USER_NAME, Main.DATABASE_PASS);
                     PreparedStatement statement = connection.prepareStatement(queryArea.getText());
-                    // запускаем запрос
                     ResultSet resultSet = statement.executeQuery();
                     displayResultSet(resultSet);
                 } else {
@@ -207,20 +207,24 @@ public class DBInterface extends JFrame {
                             params.add(new Parameter(parameterTemplates.get(i).getVarType(), inputFields.get(i).getText().trim()));
                         }
                     }
-                    Connection connection = DriverManager.getConnection(Main.DATABASE_URL, Main.USER_NAME, Main.DATABASE_PASS);
-                    ResultSet resultSet = selectedQuery.executeQuery(connection, params);
 
-                    // Проверяем тип запроса перед отображением результата
+                    Connection connection = DriverManager.getConnection(Main.DATABASE_URL, Main.USER_NAME, Main.DATABASE_PASS);
+
                     if (selectedQuery.getType() == Query.TYPE_DELETE || selectedQuery.getType() == Query.TYPE_UPDATE) {
+                        // Для DELETE/UPDATE используем executeUpdate()
+                        CallableStatement callableStatement = (CallableStatement) selectedQuery.getPreparedStatement(connection, params);
+                        callableStatement.execute();
                         JOptionPane.showMessageDialog(this, "Запрос выполнен успешно", "Успех", JOptionPane.INFORMATION_MESSAGE);
                     } else {
+                        // Для SELECT-запросов
+                        ResultSet resultSet = selectedQuery.getPreparedStatement(connection, params).executeQuery();
                         displayResultSet(resultSet);
                     }
                 }
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Некорректное число: " + ex.getMessage(), "Ошибка", JOptionPane.ERROR_MESSAGE);
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(this, "Ошибка выполнения запроса: " + e.getMessage(), "Ошибка", JOptionPane.ERROR_MESSAGE);
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Ошибка выполнения запроса: " + ex.getMessage(), "Ошибка", JOptionPane.ERROR_MESSAGE);
             }
         }
     }

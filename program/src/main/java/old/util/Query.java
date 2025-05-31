@@ -48,15 +48,12 @@ public abstract class Query {
             Parameter parameter = this.params.get(i);
             char type = parameter.getType();
             paramTypeCheck(type, parameter);
-            if (type == Parameter.TYPE_INT) {
-                statement.setInt(j, Integer.parseInt(parameter.getValue()));
-            } else if (type == Parameter.TYPE_STRING) {
-                statement.setString(j, parameter.getValue()); // !!!!! ЗДЕСЬ ОШИБКА
-            } else if (type == Parameter.TYPE_DATE) {
-                statement.setDate(j, Date.valueOf(parameter.getValue()));
-            } else if (type == Parameter.TYPE_FLOAT) {
-                statement.setFloat(j, Float.parseFloat(parameter.getValue()));
-            } else throw new IllegalArgumentException("Введён неизвестный тип данных в качестве параметра");
+            if (type == Parameter.TYPE_STRING) {
+                ((CallableStatement) statement).setString(j, parameter.getValue());
+            } else if (type == Parameter.TYPE_INT) {
+                ((CallableStatement) statement).setInt(j, Integer.parseInt(parameter.getValue()));
+            }
+            // Добавьте остальные типы, если нужно
         }
         return statement;
     }
