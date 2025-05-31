@@ -71,7 +71,7 @@ public abstract class Query {
         }
     }
 
-    private void paramTypeCheck(Character type, Parameter param){
+    protected void paramTypeCheck(Character type, Parameter param){
         if (param.getType() != type){
             throw new IllegalArgumentException("Введён параметр неверного типа");
         }

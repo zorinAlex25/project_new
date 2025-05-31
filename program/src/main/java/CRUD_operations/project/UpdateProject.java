@@ -2,7 +2,7 @@ package CRUD_operations.project;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import tables.Project;
+import CRUD_operations.tables.Project;
 import util.HibernateUtil;
 
 public class UpdateProject {

@@ -1,4 +1,4 @@
-package tables;
+package CRUD_operations.tables;
 
 import jakarta.persistence.*;
 

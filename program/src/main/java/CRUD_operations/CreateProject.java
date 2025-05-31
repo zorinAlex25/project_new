@@ -1,6 +1,6 @@
 package CRUD_operations;
 
-import tables.Project;
+import CRUD_operations.tables.Project;
 import util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;

@@ -29,10 +29,13 @@ public class ProcedureQuery extends Query {
         connection.setAutoCommit(false);
 
         CallableStatement callableStatement = connection.prepareCall(this.queryString);
-        setParamsToStatement(callableStatement, params);
+        callableStatement.setString(1,"Инженер-физик");
+        // setParamsToStatement(callableStatement, params);
+        // callableStatement.registerOutParameter(1,Types.OTHER);
         callableStatement.execute();
 
         connection.commit();
-        return callableStatement.getObject(1, ResultSet.class); // Получаем результат как ResultSet
+        return (ResultSet) callableStatement.getObject(1, ResultSet.class); // Получаем результат как ResultSet
     }
+
 }

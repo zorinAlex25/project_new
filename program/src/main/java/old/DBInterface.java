@@ -341,23 +341,54 @@ public class DBInterface extends JFrame {
         "    COMMIT; " +
         " END;' LANGUAGE plpgsql");
          */
+
         queries.add(new ProcedureQuery("Удалить все образования по квалификации",
                 "DO $$\n" +
                         "DECLARE\n" +
                         "  r int;\n" +
                         "  str character varying(5000);\n" +
                         "BEGIN\n" +
-                        "  SELECT ? INTO str;\n" +
+                        "  SELECT $1 INTO str;\n" +
                         "  FOR r IN SELECT id FROM education WHERE qualification = str\n" +
                         "  LOOP\n" +
                         "    DELETE FROM empl_edu_list WHERE edu_id = r;\n" +
                         "    DELETE FROM education WHERE id = r;\n" +
                         "  END LOOP;\n" +
                         "END $$;",
-                Query.TYPE_DELETE,
+                Query.TYPE_DELETE, // null,
                 List.of(qualification),
                 "remove_edu_by_qual"));
+        /*
+        "RETURNS REFCURSOR AS $$\n" +
+                // "    emp_cursor REFCURSOR;\n"
+                "DECLARE\n" +
+                "  r int;\n" +
+                "  str character varying(5000);\n" +
+                "BEGIN\n" +
+                "  SELECT 'Инженер-физик' INTO str;\n" +
+                "  FOR r IN SELECT id FROM education WHERE qualification = str\n" +
+                "  LOOP\n" +
+                "    DELETE FROM empl_edu_list WHERE edu_id = r;\n" +
+                "    DELETE FROM education WHERE id = r;\n" +
+                "  END LOOP;",Query.TYPE_DELETE,List.of(qualification),"remove_edu_by_qual"));
 
+        queries.add(new ProcedureQuery("Удалить все образования по квалификации",
+                "DO $$\n" +
+                        "DECLARE\n" +
+                        "  r int;\n" +
+                        "  str character varying(5000);\n" +
+                        "BEGIN\n" +
+                        "  SELECT 'Инженер-физик' INTO str;\n" +
+                        "  FOR r IN SELECT id FROM education WHERE qualification = str\n" +
+                        "  LOOP\n" +
+                        "    DELETE FROM empl_edu_list WHERE edu_id = r;\n" +
+                        "    DELETE FROM education WHERE id = r;\n" +
+                        "  END LOOP;\n" +
+                        "END $$;",
+                Query.TYPE_DELETE, // null,
+                List.of(qualification),
+                "remove_edu_by_qual"));
+         */
         ParameterTemplate workerID = new ParameterTemplate("ID работника",ParameterTemplate.TYPE_INT);
         queries.add(new SimpleQuery("Перевести сотрудника с нужным ID в другую группу",
                 "UPDATE employee\n" +
