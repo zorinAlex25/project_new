@@ -298,8 +298,8 @@ public class DBInterface extends JFrame {
     public static List<Query> getQueries() {
         List<Query> queries = new ArrayList<Query>();
 
-        ParameterTemplate groupId = new ParameterTemplate("ID группы", ParameterTemplate.TYPE_INT);
-        ParameterTemplate minPrice = new ParameterTemplate("Мин. цена", ParameterTemplate.TYPE_INT);
+        ParameterTemplate groupId = new ParameterTemplate("ID группы", "group_ID", ParameterTemplate.TYPE_INT);
+        ParameterTemplate minPrice = new ParameterTemplate("Мин. цена", "min_price", ParameterTemplate.TYPE_INT);
 
         queries.add(new SimpleQuery("Вывести всех сотрудников", "SELECT * FROM employee", Query.TYPE_READ, null));
         queries.add(new SimpleQuery("Вывести проекты с датами",
@@ -333,7 +333,8 @@ public class DBInterface extends JFrame {
                 "SELECT t_code AS \"type code\", m_code AS \"model code\" FROM device\n" +
                         "WHERE price >= ?", Query.TYPE_READ, List.of(minPrice)));
 
-        ParameterTemplate qualification = new ParameterTemplate("Квалификация", ParameterTemplate.TYPE_STRING);
+        ParameterTemplate qualification = new ParameterTemplate("Квалификация", "qualification",
+                ParameterTemplate.TYPE_STRING);
         /*
         stmt.execute("CREATE OR REPLACE PROCEDURE commitproc(a INOUT bigint) AS '" +
         " BEGIN " +
@@ -371,7 +372,9 @@ public class DBInterface extends JFrame {
                 "    DELETE FROM empl_edu_list WHERE edu_id = r;\n" +
                 "    DELETE FROM education WHERE id = r;\n" +
                 "  END LOOP;",Query.TYPE_DELETE,List.of(qualification),"remove_edu_by_qual"));
+        */
 
+        /*
         queries.add(new ProcedureQuery("Удалить все образования по квалификации",
                 "DO $$\n" +
                         "DECLARE\n" +
@@ -389,7 +392,7 @@ public class DBInterface extends JFrame {
                 List.of(qualification),
                 "remove_edu_by_qual"));
          */
-        ParameterTemplate workerID = new ParameterTemplate("ID работника",ParameterTemplate.TYPE_INT);
+        ParameterTemplate workerID = new ParameterTemplate("ID работника","worker_ID",ParameterTemplate.TYPE_INT);
         queries.add(new SimpleQuery("Перевести сотрудника с нужным ID в другую группу",
                 "UPDATE employee\n" +
                 "SET gr_id = ?\n" +

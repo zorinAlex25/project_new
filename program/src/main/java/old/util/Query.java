@@ -3,7 +3,8 @@ package old.util;
 import java.sql.*;
 import java.util.List;
 
-public abstract class Query {
+public abstract class Query
+{
     protected String queryName; // название запроса
     protected String queryString; // хранит сам SQL-запрос в виде строки
     protected List<ParameterTemplate> requiredParamsTemplates; // хранит типы параметров
@@ -16,15 +17,17 @@ public abstract class Query {
     public static final Character TYPE_READ = 'R';
     public static final Character TYPE_UPDATE = 'U';
     public static final Character TYPE_DELETE = 'D';
+
     /**
-    type:
-    C - create,
-    R - read,
-    U - update,
-    D - delete
+     * type:
+     * C - create,
+     * R - read,
+     * U - update,
+     * D - delete
      **/
 
-    public Query(String queryName, String queryString, Character type, List<ParameterTemplate> requiredParamsTemplates) {
+    public Query(String queryName, String queryString, Character type, List<ParameterTemplate> requiredParamsTemplates)
+    {
         this.queryName = queryName;
         this.queryString = queryString;
         this.params = null;
@@ -34,65 +37,114 @@ public abstract class Query {
 
     public abstract ResultSet executeQuery(Connection connection, List<Parameter> params) throws SQLException;
 
-    public PreparedStatement getPreparedStatement(Connection connection, List<Parameter> params) throws SQLException {
+    public PreparedStatement getPreparedStatement(Connection connection, List<Parameter> params) throws SQLException
+    {
         paramQuantityCheck(params); // проверка кол-ва параметров
         PreparedStatement statement = connection.prepareStatement(this.queryString);
         statement = setParamsToStatement(statement, params);
         return statement;
     }
 
-    protected PreparedStatement setParamsToStatement(PreparedStatement statement, List<Parameter> params) throws SQLException {
+    protected PreparedStatement setParamsToStatement(PreparedStatement statement, List<Parameter> params) throws SQLException
+    {
         this.params = params;
-        for (int i = 0; i < this.params.size(); i++) {
+        for (int i = 0; i < this.params.size(); i++)
+        {
             int j = i + 1;
             Parameter parameter = this.params.get(i);
             char type = parameter.getType();
             paramTypeCheck(type, parameter);
-            if (type == Parameter.TYPE_INT) {
+            if (type == Parameter.TYPE_INT)
+            {
                 statement.setInt(j, Integer.parseInt(parameter.getValue()));
-            } else if (type == Parameter.TYPE_STRING) {
+            } else if (type == Parameter.TYPE_STRING)
+            {
                 statement.setString(j, parameter.getValue()); // !!!!! ЗДЕСЬ ОШИБКА
-            } else if (type == Parameter.TYPE_DATE) {
+            } else if (type == Parameter.TYPE_DATE)
+            {
                 statement.setDate(j, Date.valueOf(parameter.getValue()));
-            } else if (type == Parameter.TYPE_FLOAT) {
+            } else if (type == Parameter.TYPE_FLOAT)
+            {
                 statement.setFloat(j, Float.parseFloat(parameter.getValue()));
             } else throw new IllegalArgumentException("Введён неизвестный тип данных в качестве параметра");
         }
         return statement;
     }
 
-    protected void paramQuantityCheck(List<Parameter> params){
-        if (!(requiredParamsTemplates == null || requiredParamsTemplates.isEmpty())) {
-            if (params == null || params.isEmpty()) {
+    protected void paramQuantityCheck(List<Parameter> params)
+    {
+        if (!(requiredParamsTemplates == null || requiredParamsTemplates.isEmpty()))
+        {
+            if (params == null || params.isEmpty())
+            {
                 throw new IllegalArgumentException("У запроса нет параметров");
-            } else if (params.size() < requiredParamsTemplates.size()) {
+            } else if (params.size() < requiredParamsTemplates.size())
+            {
                 throw new IllegalArgumentException("Недостаточно параметров");
             }
         }
     }
 
-    protected void paramTypeCheck(Character type, Parameter param){
-        if (param.getType() != type){
+    protected void paramTypeCheck(Character type, Parameter param)
+    {
+        if (param.getType() != type)
+        {
             throw new IllegalArgumentException("Введён параметр неверного типа");
         }
     }
 
-    public boolean getHasCursor() {
+    protected String getParamsInLatin(boolean getInOutType) // строка с параметрами функции
+    {
+        StringBuilder res = new StringBuilder();
+        int paramsQuantity = this.requiredParamsTemplates.size();
+        String param;
+        if (paramsQuantity > 0)
+        {
+            for (int i = 0; i < paramsQuantity - 1; i++)
+            {
+                ParameterTemplate parameterTemplate = this.requiredParamsTemplates.get(i);
+                param = parameterTemplate.getNameInLatin();
+                if (getInOutType) {
+                    if (parameterTemplate.getInOutType() != ParameterTemplate.IN) {
+                        param = parameterTemplate.getInOutType() + " " + param;
+                    }
+                }
+                param = param + " " + parameterTemplate.getVarTypeAsString();
+
+                res.append(param).append(", ");
+            }
+            return res.substring(0, res.length() - 2);
+        }
+        return "";
+    }
+
+    public boolean getHasCursor()
+    {
         return hasCursor;
     }
-    public Character getType() {
+
+    public Character getType()
+    {
         return type;
     }
-    public String getQueryName() {
+
+    public String getQueryName()
+    {
         return queryName;
     }
-    public String getQueryString() {
+
+    public String getQueryString()
+    {
         return queryString;
     }
-    public List<ParameterTemplate> getRequiredParamsTemplates() {
+
+    public List<ParameterTemplate> getRequiredParamsTemplates()
+    {
         return requiredParamsTemplates;
     }
-    public List<Parameter> getParams() {
+
+    public List<Parameter> getParams()
+    {
         return params;
     }
 }

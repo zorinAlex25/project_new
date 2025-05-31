@@ -14,20 +14,26 @@ public class ParameterTemplate {
     public static final String OUT = "OUT";
 
     private String name;
+    private String nameInLatin;
     private char varType;
     private String inOutType = IN; // значение по умолчанию - in
 
+    /*
     public ParameterTemplate(String name, char varType, String inOutType)
     {
         this.name = name;
         this.varType = varType;
         this.inOutType = inOutType;
     }
+     */
 
-    public ParameterTemplate(String name, Character varType) {
+    public ParameterTemplate(String name, String nameInLatin, char varType)
+    {
         this.name = name;
+        this.nameInLatin = nameInLatin;
         this.varType = varType;
     }
+
     public String getVarTypeAsString(){
         switch (varType){
             case TYPE_DATE :
@@ -47,10 +53,19 @@ public class ParameterTemplate {
         String string = name.trim().replace(".","");
         return string.replaceAll("\\s+", " ").replaceAll(" ","_");
     }
-    public String getName() {
+
+    public String getName()
+    {
         return name;
     }
-    public char getVarType() {
+
+    public String getNameInLatin()
+    {
+        return nameInLatin;
+    }
+
+    public char getVarType()
+    {
         return varType;
     }
     public String getInOutType()
