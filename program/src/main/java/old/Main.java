@@ -22,10 +22,6 @@ public class Main {
         Calendar calendar = Calendar.getInstance();
 
         /*
-        Hibernate - на след. неделе
-
-        Плюс балл:
-        Реализовать интерфейс (JavaFX/Swing)
         Реализовать ORM - ПО для работы с БД из кода
          */
 

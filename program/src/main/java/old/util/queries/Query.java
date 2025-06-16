@@ -1,4 +1,7 @@
-package old.util;
+package old.util.queries;
+
+import old.util.params.Parameter;
+import old.util.params.ParameterTemplate;
 
 import java.sql.*;
 import java.util.List;
@@ -52,7 +55,7 @@ public abstract class Query
         {
             int j = i + 1;
             Parameter parameter = this.params.get(i);
-            char type = parameter.getType();
+            char type = parameter.getVarType();
             paramTypeCheck(type, parameter);
             if (type == Parameter.TYPE_INT)
             {
@@ -87,7 +90,7 @@ public abstract class Query
 
     protected void paramTypeCheck(Character type, Parameter param)
     {
-        if (param.getType() != type)
+        if (param.getVarType() != type)
         {
             throw new IllegalArgumentException("Введён параметр неверного типа");
         }

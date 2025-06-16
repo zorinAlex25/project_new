@@ -1,4 +1,7 @@
-package old.util;
+package old.util.queries;
+
+import old.util.params.Parameter;
+import old.util.params.ParameterTemplate;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

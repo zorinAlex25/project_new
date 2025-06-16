@@ -1,6 +1,10 @@
 package old;
 
-import old.util.*;
+import old.util.params.Parameter;
+import old.util.params.ParameterTemplate;
+import old.util.queries.ProcedureQuery;
+import old.util.queries.Query;
+import old.util.queries.SimpleQuery;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -309,7 +313,7 @@ public class DBInterface extends JFrame {
                         "JOIN stage ON project.id = stage.pr_id\n" +
                         "GROUP BY project_id, project_name, project_start_date\n" +
                         "ORDER BY project_id\n", Query.TYPE_READ, null));
-        // !!!!!!
+
         queries.add(new SimpleQuery("Вывести операции с датами",
                 "SELECT op.id AS operation_id, \n" +
                 "op.op_name AS operation_name, \n" +
@@ -335,13 +339,6 @@ public class DBInterface extends JFrame {
 
         ParameterTemplate qualification = new ParameterTemplate("Квалификация", "qualificationVar",
                 ParameterTemplate.TYPE_STRING);
-        /*
-        stmt.execute("CREATE OR REPLACE PROCEDURE commitproc(a INOUT bigint) AS '" +
-        " BEGIN " +
-        "    INSERT INTO temp_val values(a); " +
-        "    COMMIT; " +
-        " END;' LANGUAGE plpgsql");
-         */
 
         queries.add(new ProcedureQuery("Удалить все образования по квалификации",
                         "DECLARE\n" +
@@ -356,39 +353,7 @@ public class DBInterface extends JFrame {
                 Query.TYPE_DELETE, // null,
                 List.of(qualification),
                 "remove_edu_by_qual"));
-        /*
-        "RETURNS REFCURSOR AS $$\n" +
-                // "    emp_cursor REFCURSOR;\n"
-                "DECLARE\n" +
-                "  r int;\n" +
-                "  str character varying(5000);\n" +
-                "BEGIN\n" +
-                "  SELECT 'Инженер-физик' INTO str;\n" +
-                "  FOR r IN SELECT id FROM education WHERE qualification = str\n" +
-                "  LOOP\n" +
-                "    DELETE FROM empl_edu_list WHERE edu_id = r;\n" +
-                "    DELETE FROM education WHERE id = r;\n" +
-                "  END LOOP;",Query.TYPE_DELETE,List.of(qualification),"remove_edu_by_qual"));
-        */
 
-        /*
-        queries.add(new ProcedureQuery("Удалить все образования по квалификации",
-                "DO $$\n" +
-                        "DECLARE\n" +
-                        "  r int;\n" +
-                        "  str character varying(5000);\n" +
-                        "BEGIN\n" +
-                        "  SELECT 'Инженер-физик' INTO str;\n" +
-                        "  FOR r IN SELECT id FROM education WHERE qualification = str\n" +
-                        "  LOOP\n" +
-                        "    DELETE FROM empl_edu_list WHERE edu_id = r;\n" +
-                        "    DELETE FROM education WHERE id = r;\n" +
-                        "  END LOOP;\n" +
-                        "END $$;",
-                Query.TYPE_DELETE, // null,
-                List.of(qualification),
-                "remove_edu_by_qual"));
-         */
         ParameterTemplate workerID = new ParameterTemplate("ID работника","worker_ID",ParameterTemplate.TYPE_INT);
         queries.add(new SimpleQuery("Перевести сотрудника с нужным ID в другую группу",
                 "UPDATE employee\n" +
@@ -414,8 +379,7 @@ public class DBInterface extends JFrame {
         return queryNames;
     }
 
-    public static void main(String[] args) {
-        // Swing не поддерживает многопоточность
+    public static void main(String[] args) { // Swing не поддерживает многопоточность
         SwingUtilities.invokeLater(() -> // гарантирует что UI-интерфейс запускается в этом потоке правильно
         {
             DBInterface frame = new DBInterface();

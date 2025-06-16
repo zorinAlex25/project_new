@@ -1,9 +1,6 @@
-package old.util;
+package old.util.params;
 
-public class Parameter {
-    private char type;
-    private String value;
-
+public abstract class ParameterAbstractClass {
     // ТИП ПЕРЕМЕННОЙ
     public static final char TYPE_FLOAT = 'F';
     public static final char TYPE_INT = 'I';
@@ -15,16 +12,14 @@ public class Parameter {
     public static final String IN = "IN";
     public static final String OUT = "OUT";
 
-    public Parameter(char type, String value) {
-        this.type = type;
-        this.value = value;
+    private char varType; // тип переменной
+
+    public ParameterAbstractClass(char varType) {
+        this.varType = varType;
     }
 
-    public char getType() {
-        return type;
-    }
-    public String getTypeAsString(){
-        switch (type){
+    public String getVarTypeAsString(){
+        switch (varType){
             case TYPE_DATE :
                 return "date";
             case TYPE_FLOAT:
@@ -37,7 +32,8 @@ public class Parameter {
                 throw new IllegalArgumentException("Unknown Type");
         }
     }
-    public String getValue() {
-        return value;
+    public char getVarType()
+    {
+        return varType;
     }
 }

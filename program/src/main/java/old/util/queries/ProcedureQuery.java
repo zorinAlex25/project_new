@@ -1,4 +1,7 @@
-package old.util;
+package old.util.queries;
+
+import old.util.params.Parameter;
+import old.util.params.ParameterTemplate;
 
 import java.sql.*;
 import java.util.List;
@@ -26,14 +29,6 @@ public class ProcedureQuery extends Query
         this.hasCursor = true; // Указываем, что это хранимая процедура с курсором
     }
 
-    /*
-    CREATE PROCEDURE insert_data(a integer, b integer)
-    LANGUAGE SQL
-    BEGIN ATOMIC
-    INSERT INTO tbl VALUES (a);
-    INSERT INTO tbl VALUES (b);
-    END;
-     */
     @Override
     public ResultSet executeQuery(Connection connection, List<Parameter> params) throws SQLException
     {
