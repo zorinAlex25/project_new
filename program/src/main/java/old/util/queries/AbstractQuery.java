@@ -6,7 +6,7 @@ import old.util.params.ParameterTemplate;
 import java.sql.*;
 import java.util.List;
 
-public abstract class Query
+public abstract class AbstractQuery
 {
     protected String queryName; // название запроса
     protected String queryString; // хранит сам SQL-запрос в виде строки
@@ -29,7 +29,7 @@ public abstract class Query
      * D - delete
      **/
 
-    public Query(String queryName, String queryString, Character type, List<ParameterTemplate> requiredParamsTemplates)
+    public AbstractQuery(String queryName, String queryString, Character type, List<ParameterTemplate> requiredParamsTemplates)
     {
         this.queryName = queryName;
         this.queryString = queryString;

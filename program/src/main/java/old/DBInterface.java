@@ -3,7 +3,7 @@ package old;
 import old.util.params.Parameter;
 import old.util.params.ParameterTemplate;
 import old.util.queries.ProcedureQuery;
-import old.util.queries.Query;
+import old.util.queries.AbstractQuery;
 import old.util.queries.SimpleQuery;
 
 import javax.swing.*;
@@ -31,7 +31,7 @@ public class DBInterface extends JFrame {
 
     private JPanel inputPanel; // контейнер для размещения и группировки компонентов (полей)
 
-    private static final List<Query> queries = getQueries();
+    private static final List<AbstractQuery> queries = getQueries();
 
     private String[] queryNames = getQueryNames();
 
@@ -150,8 +150,8 @@ public class DBInterface extends JFrame {
         queryComboBox.addActionListener(e -> updateInputFieldsVisibility()); // показывает поля для ввода
     }
 
-    private Query selectQueryByName(String queryName) {
-        for (Query query : queries) {
+    private AbstractQuery selectQueryByName(String queryName) {
+        for (AbstractQuery query : queries) {
             if (queryName.equalsIgnoreCase(query.getQueryName())) {
                 return query;
             }
@@ -169,7 +169,7 @@ public class DBInterface extends JFrame {
             }
             return;
         }
-        Query selectedQuery = selectQueryByName(selectedQueryName);
+        AbstractQuery selectedQuery = selectQueryByName(selectedQueryName);
         List<ParameterTemplate> parameterTemplates = selectedQuery.getRequiredParamsTemplates();
 
         int paramsTemplatesQuantity;
@@ -203,7 +203,7 @@ public class DBInterface extends JFrame {
                     ResultSet resultSet = statement.executeQuery();
                     displayResultSet(resultSet);
                 } else {
-                    Query selectedQuery = selectQueryByName(selectedQueryName);
+                    AbstractQuery selectedQuery = selectQueryByName(selectedQueryName);
                     List<ParameterTemplate> parameterTemplates = selectedQuery.getRequiredParamsTemplates();
                     List<Parameter> params = new ArrayList<>();
                     if (parameterTemplates != null) {
@@ -215,7 +215,7 @@ public class DBInterface extends JFrame {
                     ResultSet resultSet = selectedQuery.executeQuery(connection, params);
 
                     // Проверяем тип запроса перед отображением результата
-                    if (selectedQuery.getType() == Query.TYPE_DELETE || selectedQuery.getType() == Query.TYPE_UPDATE) {
+                    if (selectedQuery.getType() == AbstractQuery.TYPE_DELETE || selectedQuery.getType() == AbstractQuery.TYPE_UPDATE) {
                         JOptionPane.showMessageDialog(this, "Запрос выполнен успешно", "Успех", JOptionPane.INFORMATION_MESSAGE);
                     } else {
                         displayResultSet(resultSet);
@@ -299,20 +299,37 @@ public class DBInterface extends JFrame {
         }
     }
 
-    public static List<Query> getQueries() {
-        List<Query> queries = new ArrayList<Query>();
+    public static List<AbstractQuery> getQueries() {
+        List<AbstractQuery> queries = new ArrayList<AbstractQuery>();
 
         ParameterTemplate groupId = new ParameterTemplate("ID группы", "group_ID", ParameterTemplate.TYPE_INT);
         ParameterTemplate minPrice = new ParameterTemplate("Мин. цена", "min_price", ParameterTemplate.TYPE_INT);
 
-        queries.add(new SimpleQuery("Вывести всех сотрудников", "SELECT * FROM employee", Query.TYPE_READ, null));
+        queries.add(new SimpleQuery("Вывести все устройства", "SELECT * FROM device", AbstractQuery.TYPE_READ, null));
+
+        queries.add(new SimpleQuery("Вывести все преобразователи частоты", "SELECT dev.*, dfc.in_cur_frequency, dfc.out_cur_frequency FROM device AS dev\n" +
+                "JOIN drive_freq_conv AS dfc\n" +
+                "ON dev.t_code = dfc.t_code AND dev.m_code = dfc.m_code;", AbstractQuery.TYPE_READ, null));
+
+        queries.add(new SimpleQuery("Вывести все источники песперебойного питания", "SELECT dev.*, cpsu.cur_frequency FROM device AS dev\n" +
+                "JOIN cont_pow_supply_unit AS cpsu\n" +
+                "ON dev.t_code = cpsu.t_code AND dev.m_code = cpsu.m_code;", AbstractQuery.TYPE_READ, null));
+
+        queries.add(new SimpleQuery("Вывести всех сотрудников", "SELECT * FROM employee", AbstractQuery.TYPE_READ, null));
+
         queries.add(new SimpleQuery("Вывести проекты с датами",
                 "SELECT project.id AS project_id, project.pr_name AS project_name," +
                         "project.s_date AS project_start_date, MAX(stage.end_date) AS project_end_date\n" +
                         "FROM project\n" +
                         "JOIN stage ON project.id = stage.pr_id\n" +
                         "GROUP BY project_id, project_name, project_start_date\n" +
-                        "ORDER BY project_id\n", Query.TYPE_READ, null));
+                        "ORDER BY project_id\n", AbstractQuery.TYPE_READ, null));
+
+        queries.add(new SimpleQuery("Вывести все стадии (stage) с датами",
+                "SELECT * FROM stage", AbstractQuery.TYPE_READ, null));
+
+        queries.add(new SimpleQuery("Вывести все этапы (step) с датами",
+                "SELECT * FROM step", AbstractQuery.TYPE_READ, null));
 
         queries.add(new SimpleQuery("Вывести операции с датами",
                 "SELECT op.id AS operation_id, \n" +
@@ -323,7 +340,36 @@ public class DBInterface extends JFrame {
                 "JOIN op_stat_change AS stat_ch ON op.id = stat_ch.op_id\n" +
                 "WHERE stat_id = (SELECT id FROM status WHERE value = 'Выполнена')\n" +
                 "GROUP BY op.id, op.op_name, op.start_date\n" +
-                "ORDER BY op.id;", Query.TYPE_READ, null));
+                "ORDER BY op.id;", AbstractQuery.TYPE_READ, null));
+
+        queries.add(new SimpleQuery("Вывести изменения статуса операций",
+                "SELECT st_chng.id, st_chng.cng_date,\n" +
+                        "op.id AS \"operation id\", op.op_name, op.start_date, op.step_id, op.gr_id,\n" +
+                        "st.value,\n" +
+                        "empl.id AS \"employee id\", empl.empl_name, empl.empl_surname, empl.empl_patronymic, empl.payment, empl.experience, empl.gr_id\n" +
+                        "FROM op_stat_change AS st_chng\n" +
+                        "JOIN operation AS op\n" +
+                        "ON op.id = st_chng.op_id\n" +
+                        "JOIN status AS st\n" +
+                        "ON st.id = st_chng.stat_id\n" +
+                        "JOIN employee AS empl\n" +
+                        "ON empl.id = st_chng.empl_id;",
+                AbstractQuery.TYPE_READ, null));
+
+        queries.add(new SimpleQuery("Вывести всех сотрудников",
+                "SELECT * FROM employee;", AbstractQuery.TYPE_READ, List.of(groupId)));
+
+        queries.add(new SimpleQuery("Вывести список всех образований, имеющихся у сотрудников",
+                "SELECT edu.id AS \"education id\", edu.qualification, edu.training,\n" +
+                        "empl.id AS \"employee id\", empl.empl_name, empl.empl_surname, empl.empl_patronymic, empl.payment, empl.experience, empl.gr_id\n" +
+                        "FROM empl_edu_list AS em_ed_l\n" +
+                        "JOIN education AS edu\n" +
+                        "ON em_ed_l.edu_id = edu.id\n" +
+                        "JOIN employee AS empl\n" +
+                        "ON em_ed_l.empl_id = empl.id;", AbstractQuery.TYPE_READ, List.of(groupId)));
+
+        queries.add(new SimpleQuery("Вывести список всех образований",
+                "SELECT * from education;", AbstractQuery.TYPE_READ, List.of(groupId)));
 
         queries.add(new SimpleQuery("Вывести сотрудников по группе",
                 "SELECT employee.empl_name AS \"name\", employee.empl_surname AS \"surname\", " +
@@ -331,11 +377,11 @@ public class DBInterface extends JFrame {
                         "FROM employee\n" +
                         "INNER JOIN empl_group\n" +
                         "ON employee.gr_id = empl_group.id\n" +
-                        "WHERE empl_group.id = ?\n", Query.TYPE_READ, List.of(groupId)));
+                        "WHERE empl_group.id = ?\n", AbstractQuery.TYPE_READ, List.of(groupId)));
 
         queries.add(new SimpleQuery("Вывести устройства по минимальной цене",
                 "SELECT t_code AS \"type code\", m_code AS \"model code\" FROM device\n" +
-                        "WHERE price >= ?", Query.TYPE_READ, List.of(minPrice)));
+                        "WHERE price >= ?", AbstractQuery.TYPE_READ, List.of(minPrice)));
 
         ParameterTemplate qualification = new ParameterTemplate("Квалификация", "qualificationVar",
                 ParameterTemplate.TYPE_STRING);
@@ -350,7 +396,7 @@ public class DBInterface extends JFrame {
                         "    DELETE FROM education WHERE id = i;\n" +
                         "  END LOOP;\n" +
                         "END;",
-                Query.TYPE_DELETE, // null,
+                AbstractQuery.TYPE_DELETE, // null,
                 List.of(qualification),
                 "remove_edu_by_qual"));
 
@@ -358,7 +404,7 @@ public class DBInterface extends JFrame {
         queries.add(new SimpleQuery("Перевести сотрудника с нужным ID в другую группу",
                 "UPDATE employee\n" +
                 "SET gr_id = ?\n" +
-                "WHERE id = ?;\n", Query.TYPE_UPDATE, List.of(groupId,workerID)));
+                "WHERE id = ?;\n", AbstractQuery.TYPE_UPDATE, List.of(groupId,workerID)));
         /*
         "Вывести всех сотрудников",
         "Вывести проекты с датами",

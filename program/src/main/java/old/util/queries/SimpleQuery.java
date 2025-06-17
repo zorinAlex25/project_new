@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class SimpleQuery extends Query{
+public class SimpleQuery extends AbstractQuery {
     /**
      * type:
      * C - create,
@@ -31,7 +31,7 @@ public class SimpleQuery extends Query{
         paramQuantityCheck(params); // проверка кол-ва параметров
         PreparedStatement statement = connection.prepareStatement(this.queryString);
         statement = setParamsToStatement(statement, params);
-        if (this.getType() == Query.TYPE_DELETE || this.getType() == Query.TYPE_UPDATE){ // Query.TYPE_CREATE
+        if (this.getType() == AbstractQuery.TYPE_DELETE || this.getType() == AbstractQuery.TYPE_UPDATE){ // Query.TYPE_CREATE
             statement.executeUpdate();
             return null;
         } else {

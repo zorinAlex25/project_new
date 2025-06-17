@@ -6,7 +6,7 @@ import old.util.params.ParameterTemplate;
 import java.sql.*;
 import java.util.List;
 
-public class ProcedureQuery extends Query
+public class ProcedureQuery extends AbstractQuery
 {
     /**
      * type:
