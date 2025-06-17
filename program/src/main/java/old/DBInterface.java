@@ -405,14 +405,6 @@ public class DBInterface extends JFrame {
                 "UPDATE employee\n" +
                 "SET gr_id = ?\n" +
                 "WHERE id = ?;\n", AbstractQuery.TYPE_UPDATE, List.of(groupId,workerID)));
-        /*
-        "Вывести всех сотрудников",
-        "Вывести проекты с датами",
-        "Вывести операции с датами",
-        "Вывести сотрудников по группе",
-        "Вывести устройства по минимальной цене",
-        "Удалить все образования по подготовке"
-         */
         return queries;
     }
 
