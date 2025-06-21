@@ -1,7 +1,6 @@
 package old.util.params;
 
 public class Parameter extends ParameterAbstractClass{
-    private char varType;
     private String value;
 
     public Parameter(char varType, String value) {
