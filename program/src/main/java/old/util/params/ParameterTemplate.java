@@ -4,7 +4,6 @@ public class ParameterTemplate extends ParameterAbstractClass{
 
     private String name;
     private String nameInLatin;
-    private char varType;
     private String inOutType = IN; // значение по умолчанию - in
 
     public ParameterTemplate(String name, String nameInLatin, char varType)
